@@ -1,22 +1,25 @@
 const express = require("express");
-
+const { EpicsController, EpicsControllerById } = require('../controlers/EpicsController');
 const router = express.Router();
 
 router.get("", (req, res) => {
-    console.log('epics');
-    res.send('epics')
+    const token = req.header('token');
+
+    EpicsController(token, res)
 });
 
 router.get("/:id", (req, res) => {
     const id = req.params.id;
-    console.log('epics get id', id);
-    res.send(`epics get id: ${id}`)
+    const token = req.header('token');
+
+    EpicsControllerById(token, id, res);
 });
 
 router.get("/:id/stories", (req, res) => {
     const id = req.params.id;
-    console.log('epics get id stories', id);
-    res.send(`epics get id stories: ${id}`)
+    const token = req.header('token');
+
+    EpicsControllerById(token, id, res);
 });
 
 module.exports = router;

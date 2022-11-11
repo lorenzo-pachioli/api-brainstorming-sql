@@ -1,17 +1,18 @@
 const express = require("express");
-
+const { UsersController, UsersControllerById } = require('../controlers/UsersController');
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    console.log('users');
-    res.send('users')
+router.get("", (req, res) => {
+    const token = req.header('token');
+
+    UsersController(token, res);
 });
 
 router.get("/:id", (req, res) => {
     const id = req.params.id;
-    console.log('users id', id);
-    res.send(`users id: ${id}`)
+    const token = req.header('token');
 
+    UsersControllerById(token, id, res);
 });
 
 module.exports = router;

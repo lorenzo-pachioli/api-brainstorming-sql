@@ -10,8 +10,11 @@ const projectsRoutes = require('./projects/routes/ProjectsRoutes');
 const storiesRoutes = require('./stories/routes/StoriesRoutes');
 const tasksRoutes = require('./tasks/routes/TasksRoutes');
 const usersRoutes = require('./users/routes/UsersRoutes');
+const bodyParser = require("body-parser");
 app.set(express.json());
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const server = http.createServer(app);
 

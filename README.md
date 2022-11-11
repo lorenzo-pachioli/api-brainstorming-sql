@@ -14,7 +14,7 @@
 10. /tasks/ -->	GET -->	Recupera un listado de Tareas	
 11. /tasks/:id -->	GET -->	Recupera una Tarea	
 12. /tasks -->	POST -->	Crea una nueva Tarea	
-13. /tasks/:id -->	PUT --> / PATCH	Modifica una Tarea	
+13. /tasks/:id -->	PUT/PATCH --> 	Modifica una Tarea	
 14. /users -->	GET -->	Recupera un listado de Users	
 15. /users/:_id -->	GET -->	Recupera un User (_id es un OID)	
 

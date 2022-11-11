@@ -1,29 +1,32 @@
 const express = require("express");
-
+const { TasksController, NewTasksController, TasksControllerById } = require('../controlers/TasksController');
 const router = express.Router();
 
 router.get("", (req, res) => {
-    console.log('task get');
-    res.send('task')
+    const token = req.header('token');
+
+    TasksController(token, res);
 });
 
 router.post("", (req, res) => {
-    console.log('task post', req);
-    res.send('task post')
+    const newTask = req.body;
+    const token = req.header('token');
 
+    NewTasksController(token, newTask, res);
 });
 
 router.get("/:id", (req, res) => {
     const id = req.params.id;
-    console.log('task get id', id);
-    res.send(`task get id: ${id}`)
+    const token = req.header('token');
 
+    TasksControllerById(token, id, res);
 });
 
 router.put("/:id", (req, res) => {
     const id = req.params.id;
-    console.log('task put id', id);
-    res.send(`task put id: ${id}`)
+    const token = req.header('token');
+
+    TasksControllerById(token, id, res);
 });
 
 module.exports = router;
