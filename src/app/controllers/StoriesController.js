@@ -1,34 +1,17 @@
-const { isIdInteger } = require('../../utils/idValidators');
-const { tokenValidator } = require('../../utils/tokenValidator');
+const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
+const { StoriesService, StoriesServiceById, StoriesServiceByIdAllTasks } = require('../services/StoriesService');
 
 exports.StoriesController = (token, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
-
-  res.status(200).json({
-    msj: 'correct stories'
-  });
+  isTokenValid(token, res) && StoriesService(res);
 }
 
 exports.StoriesControllerById = (token, id, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
+  isIdAndTokenValid(id, token, res) && StoriesServiceById(id, res);
+}
 
-  if (!isIdInteger(id)) {
-    return res.status(400).json({
-      msj: 'Incorrect id number'
-    });
-  }
+exports.StoriesControllerByIdAllTasks = (token, id, res) => {
 
-  res.status(200).json({
-    msj: 'correct stories'
-  });
+  isIdAndTokenValid(id, token, res) && StoriesServiceByIdAllTasks(id, res);
 }

@@ -1,34 +1,18 @@
-const { isIdInteger } = require('../../utils/idValidators');
-const { tokenValidator } = require('../../utils/tokenValidator');
+const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
+const { EpicsService, EpicsServiceById, EpicsServiceByIdAllStories } = require('../services/EpicsService');
+
 
 exports.EpicsController = (token, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
-
-  res.status(200).json({
-    msj: 'correct epic'
-  });
+  isTokenValid(token, res) && EpicsService(res);
 }
 
 exports.EpicsControllerById = (token, id, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
+  isIdAndTokenValid(id, token, res) && EpicsServiceById(id, res);
+}
 
-  if (!isIdInteger(id)) {
-    return res.status(400).json({
-      msj: 'Incorrect id number'
-    });
-  }
+exports.EpicsControllerByIdAllStories = (token, id, res) => {
 
-  res.status(200).json({
-    msj: 'correct epic'
-  });
+  isIdAndTokenValid(id, token, res) && EpicsServiceByIdAllStories(id, res);
 }

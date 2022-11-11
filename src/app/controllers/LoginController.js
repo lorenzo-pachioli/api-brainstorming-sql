@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
+const { LoginService } = require('../services/LoginService');
 
 exports.LoginController = (body, res) => {
 
-  if (body.user.length < 4) {
+  if (body.username.length < 4) {
     return res.status(400).json({
-      msj: 'Incorrect user'
+      msj: 'Incorrect username'
     });
   }
 
@@ -14,16 +14,10 @@ exports.LoginController = (body, res) => {
     });
   }
 
-  let jwtSecretKey = process.env.JWT_SECRET_KEY;
-  let data = {
-    time: Date(),
-    userId: 12,
+  const user = {
+    username: body.username,
+    password: body.password
   }
 
-  const token = jwt.sign(data, jwtSecretKey);
-
-  res.status(200).json({
-    msj: 'correct login',
-    token: token
-  });
+  LoginService(user, res);
 }

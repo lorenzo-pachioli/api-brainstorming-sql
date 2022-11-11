@@ -1,34 +1,17 @@
-const { isIdInteger } = require('../../utils/idValidators');
-const { tokenValidator } = require('../../utils/tokenValidator');
+const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
+const { ProjectService, ProjectServiceById, ProjectServiceByIdAllEpics } = require('../services/ProjectsService');
 
 exports.ProjectController = (token, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
-
-  res.status(200).json({
-    msj: 'correct project'
-  });
+  isTokenValid(token, res) && ProjectService(res);
 }
 
 exports.ProjectControllerById = (token, id, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
+  isIdAndTokenValid(id, token, res) && ProjectServiceById(id, res);
+}
 
-  if (!isIdInteger(id)) {
-    return res.status(400).json({
-      msj: 'Incorrect id number'
-    });
-  }
+exports.ProjectControllerByIdAllEpics = (token, id, res) => {
 
-  res.status(200).json({
-    msj: 'correct project'
-  });
+  isIdAndTokenValid(id, token, res) && ProjectServiceByIdAllEpics(id, res);
 }

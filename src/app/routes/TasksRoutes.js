@@ -1,5 +1,5 @@
 const express = require("express");
-const { TasksController, NewTasksController, TasksControllerById } = require('../controlers/TasksController');
+const { TasksController, NewTasksController, TasksControllerById, ModifyTasksControllerById } = require('../controllers/TasksController');
 const router = express.Router();
 
 router.get("", (req, res) => {
@@ -24,9 +24,11 @@ router.get("/:id", (req, res) => {
 
 router.put("/:id", (req, res) => {
     const id = req.params.id;
+    const newTask = req.body;
+    newTask.id = id;
     const token = req.header('token');
 
-    TasksControllerById(token, id, res);
+    ModifyTasksControllerById(token, newTask, res);
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require("express");
-const { EpicsController, EpicsControllerById } = require('../controlers/EpicsController');
+const { EpicsController, EpicsControllerById, EpicsControllerByIdAllStories } = require('../controllers/EpicsController');
 const router = express.Router();
 
 router.get("", (req, res) => {
@@ -19,7 +19,7 @@ router.get("/:id/stories", (req, res) => {
     const id = req.params.id;
     const token = req.header('token');
 
-    EpicsControllerById(token, id, res);
+    EpicsControllerByIdAllStories(token, id, res);
 });
 
 module.exports = router;

@@ -1,17 +1,10 @@
-const { isIdInteger } = require('../../utils/idValidators');
 const { tokenValidator } = require('../../utils/tokenValidator');
+const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
+const { TasksService, NewTasksService, TasksServiceById, ModifyTasksServiceById } = require('../services/TasksService');
 
 exports.TasksController = (token, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
-  }
-
-  res.status(200).json({
-    msj: 'correct tasks'
-  });
+  isTokenValid(token, res) && TasksService(res);
 }
 
 exports.NewTasksController = (token, newTask, res) => {
@@ -34,12 +27,15 @@ exports.NewTasksController = (token, newTask, res) => {
     });
   }
 
-  res.status(200).json({
-    msj: 'correct tasks'
-  });
+  NewTasksService(newTask, res);
 }
 
 exports.TasksControllerById = (token, id, res) => {
+
+  isIdAndTokenValid(id, token, res) && TasksServiceById(id, res);
+}
+
+exports.ModifyTasksControllerById = (token, newTask, res) => {
 
   if (!tokenValidator(token)) {
     return res.status(401).json({
@@ -47,13 +43,17 @@ exports.TasksControllerById = (token, id, res) => {
     });
   }
 
-  if (!isIdInteger(id)) {
+  if (!newTask.name || newTask.name.length < 4) {
     return res.status(400).json({
-      msj: 'Incorrect id number'
+      msj: 'Incorrect task name'
     });
   }
 
-  res.status(200).json({
-    msj: 'correct tasks'
-  });
+  if (newTask.description && newTask.description.length < 10) {
+    return res.status(400).json({
+      msj: 'Incorrect task description'
+    });
+  }
+
+  ModifyTasksServiceById(newTask, res);
 }
