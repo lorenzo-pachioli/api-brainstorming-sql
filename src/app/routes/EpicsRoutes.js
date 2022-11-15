@@ -1,11 +1,18 @@
 const express = require("express");
-const { EpicsController, EpicsControllerById, EpicsControllerByIdAllStories } = require('../controllers/EpicsController');
+const { AllEpicsController, NewEpicsController, EpicsControllerById, EpicsControllerByIdAllStories } = require('../controllers/EpicsController');
 const router = express.Router();
 
 router.get("", (req, res) => {
     const token = req.header('token');
 
-    EpicsController(token, res)
+    AllEpicsController(token, res);
+});
+
+router.post("", (req, res) => {
+    const newEpic = req.body;
+    const token = req.header('token');
+    console.log(newEpic);
+    NewEpicsController(token, newEpic, res);
 });
 
 router.get("/:id", (req, res) => {
