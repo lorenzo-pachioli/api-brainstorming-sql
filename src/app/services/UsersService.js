@@ -1,5 +1,4 @@
 const UsersBrainstorming = require('../models/UsersModel');
-const { callbackError } = require('../../utils/errorResponses');
 const { createUsers } = require('../../utils/modelCreators');
 
 exports.NewUsersService = async (newUser, res) => {
