@@ -75,7 +75,7 @@ exports.EpicsServiceById = async (id, res) => {
       content: {}
     });
   } catch (err) {
-    res.status(401).json({
+    res.status(400).json({
       msj: `Couldn't get epic`,
       content: {}
     });
@@ -108,7 +108,7 @@ exports.EpicsServiceByIdAllStories = async (id, res) => {
     });
 
   } catch (err) {
-    res.status(401).json({
+    res.status(400).json({
       msj: `Couldn't get story list for epic ${id}`,
       content: []
     });
