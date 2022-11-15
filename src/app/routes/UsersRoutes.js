@@ -1,11 +1,18 @@
 const express = require("express");
-const { UsersController, UsersControllerById } = require('../controllers/UsersController');
+const { AllUsersController, NewUsersController, UsersControllerById } = require('../controllers/UsersController');
 const router = express.Router();
+
+router.post("", (req, res) => {
+    const newUser = req.body;
+    const token = req.header('token');
+    console.log(newUser);
+    NewUsersController(token, newUser, res);
+});
 
 router.get("", (req, res) => {
     const token = req.header('token');
 
-    UsersController(token, res);
+    AllUsersController(token, res);
 });
 
 router.get("/:id", (req, res) => {

@@ -1,9 +1,17 @@
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
-const { UsersService, UsersServiceById } = require('../services/UsersService');
+const { NewUsersService, AllUsersService, UsersServiceById } = require('../services/UsersService');
+const { isNewUserValid } = require('../../utils/newItemsValidator');
 
-exports.UsersController = (token, res) => {
+exports.NewUsersController = (token, newUser, res) => {
 
-  isTokenValid(token, res) && UsersService(res);
+  if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
+    NewUsersService(newUser, res);
+  }
+}
+
+exports.AllUsersController = (token, res) => {
+
+  isTokenValid(token, res) && AllUsersService(res);
 }
 
 exports.UsersControllerById = (token, id, res) => {
