@@ -1,11 +1,18 @@
 const express = require("express");
-const { ProjectController, ProjectControllerById, ProjectControllerByIdAllEpics } = require('../controllers/ProjectController');
+const { AllProjectController, NewProjectController, ProjectControllerById, ProjectControllerByIdAllEpics } = require('../controllers/ProjectController');
 const router = express.Router();
+
+router.post("", (req, res) => {
+    const newProject = req.body;
+    const token = req.header('token');
+    console.log(newProject);
+    NewProjectController(token, newProject, res);
+});
 
 router.get("", (req, res) => {
     const token = req.header('token');
 
-    ProjectController(token, res);
+    AllProjectController(token, res);
 });
 
 router.get("/:id", (req, res) => {
