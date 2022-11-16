@@ -10,7 +10,7 @@ exports.NewProjectService = async (newProject, res) => {
 
     if (projectAlreadyExist) {
       return res.status(200).json({
-        msj: `User already exist`,
+        msj: `Project already exist`,
         content: {}
       });
     }
@@ -25,7 +25,7 @@ exports.NewProjectService = async (newProject, res) => {
   } catch (err) {
     console.log('error', err);
     res.status(400).json({
-      msj: `Couldn't save epic`,
+      msj: `Couldn't save project`,
       content: {}
     });
   }

@@ -54,3 +54,44 @@ exports.createProjects = (newProject) => {
 
   return project;
 }
+
+exports.createStories = (newStory) => {
+
+  const {
+    id,
+    name,
+    epic,
+    description,
+    owner,
+    assignedTo,
+    points,
+    created,
+    due,
+    started,
+    finished,
+    status,
+    icon
+  } = newStory;
+
+  if (!id || !name || !epic) {
+    return;
+  }
+
+  const story = Stories({
+    id: id,
+    name: name,
+    epic: epic,
+    description: description && description,
+    owner: owner && owner,
+    assignedTo: assignedTo && assignedTo,
+    points: points && points,
+    created: created && created,
+    due: due && due,
+    started: started && started,
+    finished: finished && finished,
+    status: status && status,
+    icon: icon && icon
+  });
+
+  return story;
+}

@@ -1,11 +1,23 @@
 const express = require("express");
-const { StoriesController, StoriesControllerById, StoriesControllerByIdAllTasks } = require('../controllers/StoriesController');
+const {
+    AllStoriesController,
+    NewStoriesController,
+    StoriesControllerById,
+    StoriesControllerByIdAllTasks
+} = require('../controllers/StoriesController');
 const router = express.Router();
 
 router.get("", (req, res) => {
     const token = req.header('token');
 
-    StoriesController(token, res);
+    AllStoriesController(token, res);
+});
+
+router.post("", (req, res) => {
+    const newStory = req.body;
+    const token = req.header('token');
+    console.log(newStory);
+    NewStoriesController(token, newStory, res);
 });
 
 router.get("/:id", (req, res) => {

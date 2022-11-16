@@ -43,3 +43,7 @@ exports.isArrayOfObjIdValid = (array) => {
     return !this.isObjectIdValid(objectId);
   });
 }
+
+exports.isDateValid = (date) => {
+  return date instanceof Date && !isNaN(date);
+}

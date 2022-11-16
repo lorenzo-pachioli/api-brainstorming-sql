@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Stories = require('./StoriesModel');
 
 const tasksSchema = new Schema({
   id: {
@@ -17,7 +18,7 @@ const tasksSchema = new Schema({
   },
   story: {
     type: Schema.Types.ObjectId,
-    ref: story,
+    ref: Stories,
     required: true
   },
   created: {
