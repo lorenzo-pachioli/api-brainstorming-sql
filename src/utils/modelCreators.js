@@ -5,15 +5,13 @@ const UsersBrainstorming = require('../app/models/UsersModel');
 const Tasks = require('../app/models/TasksModel');
 
 exports.createEpics = (newEpic) => {
+
   const { id, project, name, description, icon } = newEpic;
-  if (!project || !name) {
-    return;
-  }
 
   const epic = Epics({
-    id: id,
-    project: project,
-    name: name,
+    id,
+    project,
+    name,
     description: description && description,
     icon: icon && icon
   });
@@ -23,15 +21,13 @@ exports.createEpics = (newEpic) => {
 
 exports.createUsers = (id, newUser) => {
 
-  if (!newUser.email || !newUser.username || !newUser.password) {
-    return;
-  }
+  const { email, username, password } = newUser;
 
   const user = UsersBrainstorming({
-    id: id,
-    email: newUser.email,
-    username: newUser.username,
-    password: newUser.password
+    id,
+    email,
+    username,
+    password
   });
 
   return user;
@@ -41,14 +37,10 @@ exports.createProjects = (newProject) => {
 
   const { id, name, members, description, icon } = newProject;
 
-  if (!id || !name || !members) {
-    return;
-  }
-
   const project = Projects({
-    id: id,
-    name: name,
-    members: members,
+    id,
+    name,
+    members,
     description: description && description,
     icon: icon && icon
   });
@@ -74,14 +66,10 @@ exports.createStories = (newStory) => {
     icon
   } = newStory;
 
-  if (!id || !name || !epic) {
-    return;
-  }
-
   const story = Stories({
-    id: id,
-    name: name,
-    epic: epic,
+    id,
+    name,
+    epic,
     description: description && description,
     owner: owner && owner,
     assignedTo: assignedTo && assignedTo,
@@ -98,6 +86,7 @@ exports.createStories = (newStory) => {
 }
 
 exports.createTask = (newTask) => {
+
   const {
     id,
     name,
@@ -109,14 +98,10 @@ exports.createTask = (newTask) => {
     icon
   } = newTask;
 
-  if (!id || !name || !story) {
-    return;
-  }
-
   const task = Tasks({
-    id: id,
-    name: name,
-    story: story,
+    id,
+    name,
+    story,
     description: description && description,
     created: created && created,
     dueDate: dueDate && dueDate,

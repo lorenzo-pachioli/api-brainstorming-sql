@@ -1,53 +1,35 @@
 const Projects = require('../models/ProjectsModel');
 const { createProjects } = require('../../utils/modelCreators');
 const Epics = require('../models/EpicsModel');
+const { response } = require('../../utils/response');
 
 exports.NewProjectService = async (newProject, res) => {
 
   try {
-
     const projectAlreadyExist = await Projects.findOne({ id: newProject.id });
-
-    if (projectAlreadyExist) {
-      return res.status(200).json({
-        msj: `Project already exist`,
-        content: {}
-      });
-    }
+    if (projectAlreadyExist) return response(`Project already exist`, 200, res, {});
 
     const project = createProjects(newProject);
     project.save();
-    res.status(200).json({
-      msj: `Project created succesfully`,
-      content: project
-    });
+
+    return response(`Project created succesfully`, 200, res, project);
 
   } catch (err) {
-    console.log('error', err);
-    res.status(400).json({
-      msj: `Couldn't save project`,
-      content: {}
-    });
+    console.log(err);
+    return response(`Couldn't save project`, 503, res);
   }
 }
 
 exports.AllProjectService = async (res) => {
 
   try {
-
     const projectsList = await Projects.find();
 
-    res.status(200).json({
-      msj: `Project list`,
-      content: projectsList
-    });
+    return response(`Project list`, 200, res, projectsList);
 
   } catch (err) {
-    console.log('error', err);
-    res.status(400).json({
-      msj: `Couldn't get project list`,
-      content: []
-    });
+    console.log(err);
+    return response(`Couldn't get project list`, 503, res);
   }
 }
 
@@ -55,22 +37,13 @@ exports.ProjectServiceById = async (id, res) => {
 
   try {
     const projectById = await Projects.findOne({ id: id });
+    if (projectById) return response(`Project ${id} doesn't exist`, 200, res, projectById);
 
-    if (projectById) {
-      return res.status(200).json({
-        msj: `Project ${id}`,
-        content: projectById
-      });
-    }
-    return res.status(200).json({
-      msj: `Project ${id} doesn't exist`,
-      content: {}
-    });
+    return response(`Project list`, 200, res, {});
+
   } catch (err) {
-    res.status(400).json({
-      msj: `Couldn't get project`,
-      content: {}
-    });
+    console.log(err);
+    return response(`Couldn't get project`, 503, res);
   }
 }
 
@@ -78,31 +51,15 @@ exports.ProjectServiceByIdAllEpics = async (id, res) => {
 
   try {
     const projectById = await Projects.findOne({ id: id });
-
-    if (!projectById) {
-      return res.status(200).json({
-        msj: `Project ${id} doesn't exist`,
-        content: []
-      });
-    }
+    if (!projectById) return response(`Project ${id} doesn't exist`, 200, res);
 
     const epicsList = await Epics.find({ project: projectById._id });
-    if (epicsList.length > 0) {
-      return res.status(200).json({
-        msj: `Epics for project ${id}`,
-        content: epicsList
-      });
-    }
+    if (epicsList.length > 0) return response(`Epics for project ${id}`, 200, res, epicsList);
 
-    return res.status(200).json({
-      msj: `There're no epics for project ${id}`,
-      content: []
-    });
+    return response(`There're no epics for project ${id}`, 200, res);
 
   } catch (err) {
-    res.status(400).json({
-      msj: `Couldn't get epic list for project ${id}`,
-      content: []
-    });
+    console.log(err);
+    return response(`Couldn't get epic list for project ${id}`, 503, res);
   }
 }

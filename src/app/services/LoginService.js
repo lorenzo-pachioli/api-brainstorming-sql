@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const UsersBrainstorming = require('../models/UsersModel');
+const { response } = require('../../utils/response');
 
 exports.LoginService = async (user, res) => {
 
@@ -7,29 +8,20 @@ exports.LoginService = async (user, res) => {
     const userExist = await UsersBrainstorming.findOne({ username: user.username });
 
     if (userExist) {
-      let jwtSecretKey = process.env.JWT_SECRET_KEY;
-      let data = {
+      const jwtSecretKey = process.env.JWT_SECRET_KEY;
+      const data = {
         time: Date(),
         userId: userExist.id,
       };
-
       const token = jwt.sign(data, jwtSecretKey);
-      return res.status(200).json({
-        msj: `correct login user ${user.username}`,
-        token: token
-      });
+
+      return response(`Correct login user ${user.username}`, 200, res, token);
     }
 
-    return res.status(200).json({
-      msj: `User ${user.username} doesn't exist`,
-      token: ""
-    });
+    return response(`User ${user.username} doesn't exist`, 200, res, "");
 
   } catch (err) {
-    console.log('error', err);
-    res.status(503).json({
-      msj: `Couldn't login`,
-      content: []
-    });
+    console.log(err);
+    return response(`Couldn't login`, 503, res);
   }
 }

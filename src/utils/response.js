@@ -1,7 +1,7 @@
-exports.response = (msj, code, res) => {
+exports.response = (msj, code, res, content = []) => {
   res.status(code).json({
     msj,
-    content: []
+    content
   });
   return false;
 }

@@ -1,32 +1,22 @@
 const Stories = require('../models/StoriesModel');
 const Tasks = require('../models/TasksModel');
 const { createStories } = require('../../utils/modelCreators');
+const { response } = require('../../utils/response');
 
 exports.NewStoriesService = async (newStory, res) => {
 
   try {
     const storyAlreadyExist = await Stories.findOne({ id: newStory.id });
-
-    if (storyAlreadyExist) {
-      return res.status(200).json({
-        msj: `Story already exist`,
-        content: {}
-      });
-    }
+    if (storyAlreadyExist) return response(`Story already exist`, 200, res, {});
 
     const story = createStories(newStory);
     story.save();
-    res.status(200).json({
-      msj: `Story created succesfully`,
-      content: story
-    });
+
+    return response(`Story created succesfully`, 200, res, story);
 
   } catch (err) {
-    console.log('error', err);
-    res.status(400).json({
-      msj: `Couldn't save story`,
-      content: {}
-    });
+    console.log(err);
+    return response(`Couldn't save story`, 503, res);
   }
 }
 
@@ -35,17 +25,11 @@ exports.AllStoriesService = async (res) => {
   try {
     const storiesList = await Stories.find();
 
-    res.status(200).json({
-      msj: `Stories list`,
-      content: storiesList
-    });
+    return response(`Stories list`, 200, res, storiesList);
 
   } catch (err) {
-    console.log('error', err);
-    res.status(400).json({
-      msj: `Couldn't get stories list`,
-      content: []
-    });
+    console.log(err);
+    return response(`Couldn't get stories list`, 503, res);
   }
 }
 
@@ -53,22 +37,13 @@ exports.StoriesServiceById = async (id, res) => {
 
   try {
     const storyById = await Stories.findOne({ id: id });
+    if (storyById) return response(`Story ${id}`, 200, res, storyById);
 
-    if (storyById) {
-      return res.status(200).json({
-        msj: `Story ${id}`,
-        content: storyById
-      });
-    }
-    return res.status(200).json({
-      msj: `Story ${id} doesn't exist`,
-      content: {}
-    });
+    return response(`Story ${id} doesn't exist`, 200, res, {});
+
   } catch (err) {
-    res.status(400).json({
-      msj: `Couldn't get story`,
-      content: {}
-    });
+    console.log(err);
+    return response(`Couldn't get story`, 503, res);
   }
 }
 
@@ -76,31 +51,15 @@ exports.StoriesServiceByIdAllTasks = async (id, res) => {
 
   try {
     const storyById = await Stories.findOne({ id: id });
-
-    if (!storyById) {
-      return res.status(200).json({
-        msj: `Story ${id} doesn't exist`,
-        content: []
-      });
-    }
+    if (!storyById) return response(`Story ${id} doesn't exist`, 200, res);
 
     const taskList = await Tasks.find({ story: storyById._id });
-    if (taskList.length > 0) {
-      return res.status(200).json({
-        msj: `Tasks for story ${id}`,
-        content: taskList
-      });
-    }
+    if (taskList.length > 0) return response(`There're no tasks for story ${id}`, 200, res, taskList);
 
-    return res.status(200).json({
-      msj: `There're no tasks for story ${id}`,
-      content: []
-    });
+    return response(`Tasks for story ${id}`, 200, res);
 
   } catch (err) {
-    res.status(400).json({
-      msj: `Couldn't get tasks list for story ${id}`,
-      content: []
-    });
+    console.log(err);
+    return response(`Couldn't get tasks list for story ${id}`, 503, res);
   }
 }
