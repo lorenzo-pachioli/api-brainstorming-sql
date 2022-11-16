@@ -5,17 +5,21 @@ exports.NewUsersService = async (newUser, res) => {
 
   try {
 
-    const userAlreadyExist = await UsersBrainstorming.findOne({ id: newUser.id });
+    const userAlreadyExist = await UsersBrainstorming.findOne({ username: newUser.username });
 
     if (userAlreadyExist) {
       return res.status(200).json({
-        msj: `User already exist`,
+        msj: `Username already exist`,
         content: []
       });
     }
 
-    const user = createUsers(1, newUser);
+    const userList = await UsersBrainstorming.find();
+    const newMaxId = userList.length + 1;
+    const user = createUsers(newMaxId, newUser);
+
     user.save();
+
     res.status(200).json({
       msj: `User created succesfully`,
       content: user

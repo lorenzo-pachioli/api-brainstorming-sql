@@ -4,7 +4,7 @@ const { isNewUserValid } = require('../../utils/newItemsValidator');
 
 exports.NewUsersController = (token, newUser, res) => {
 
-  if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
+  if (isTokenValid(token, res) && isNewUserValid(newUser, res)) {
     NewUsersService(newUser, res);
   }
 }
