@@ -1,6 +1,6 @@
 const Projects = require('../models/ProjectsModel');
-const { createProjects } = require('../../utils/modelCreators');
 const Epics = require('../models/EpicsModel');
+const { createProjects } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
 exports.NewProjectService = async (newProject, res) => {

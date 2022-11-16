@@ -1,8 +1,8 @@
-const Epics = require('../app/models/EpicsModel');
-const Stories = require('../app/models/StoriesModel');
-const Projects = require('../app/models/ProjectsModel');
-const UsersBrainstorming = require('../app/models/UsersModel');
-const Tasks = require('../app/models/TasksModel');
+const Epics = require('../models/EpicsModel');
+const Stories = require('../models/StoriesModel');
+const Projects = require('../models/ProjectsModel');
+const UsersBrainstorming = require('../models/UsersModel');
+const Tasks = require('../models/TasksModel');
 
 exports.createEpics = (newEpic) => {
 

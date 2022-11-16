@@ -1,5 +1,5 @@
 const UsersBrainstorming = require('../models/UsersModel');
-const { createUsers } = require('../../utils/modelCreators');
+const { createUsers } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
 function passwordRemove(users) {

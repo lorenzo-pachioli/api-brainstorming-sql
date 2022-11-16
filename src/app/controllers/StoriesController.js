@@ -1,6 +1,6 @@
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
 const { AllStoriesService, NewStoriesService, StoriesServiceById, StoriesServiceByIdAllTasks } = require('../services/StoriesService');
-const { isNewStoryValid } = require('../../utils/newItemsValidator');
+const { isNewStoryValid } = require('../helpers/newItemsValidator');
 
 exports.NewStoriesController = (token, newStory, res) => {
 

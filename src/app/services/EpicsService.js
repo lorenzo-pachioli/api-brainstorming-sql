@@ -1,7 +1,7 @@
 const Epics = require('../models/EpicsModel');
 const Stories = require('../models/StoriesModel');
 const Projects = require('../models/ProjectsModel');
-const { createEpics } = require('../../utils/modelCreators');
+const { createEpics } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
 exports.NewEpicsService = async (newEpic, res) => {

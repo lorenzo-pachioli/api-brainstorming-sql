@@ -1,7 +1,6 @@
-const { tokenValidator } = require('../../utils/tokenValidator');
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
 const { AllTasksService, NewTasksService, TasksServiceById, ModifyTasksServiceById } = require('../services/TasksService');
-const { isNewTaskValid } = require('../../utils/newItemsValidator');
+const { isNewTaskValid } = require('../helpers/newItemsValidator');
 
 exports.AllTasksController = (token, res) => {
 

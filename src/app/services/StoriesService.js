@@ -1,6 +1,6 @@
 const Stories = require('../models/StoriesModel');
 const Tasks = require('../models/TasksModel');
-const { createStories } = require('../../utils/modelCreators');
+const { createStories } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
 exports.NewStoriesService = async (newStory, res) => {

@@ -1,4 +1,4 @@
-const { isIdInteger } = require('./idValidators');
+const { isIdInteger } = require('./inputsValidator');
 const { tokenValidator } = require('./tokenValidator');
 const { response } = require('./response');
 

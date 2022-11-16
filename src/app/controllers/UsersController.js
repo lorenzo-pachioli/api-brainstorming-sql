@@ -1,6 +1,6 @@
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
 const { NewUsersService, AllUsersService, UsersServiceById } = require('../services/UsersService');
-const { isNewUserValid } = require('../../utils/newItemsValidator');
+const { isNewUserValid } = require('../helpers/newItemsValidator');
 
 exports.NewUsersController = (token, newUser, res) => {
 

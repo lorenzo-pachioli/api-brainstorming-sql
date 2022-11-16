@@ -4,8 +4,8 @@ const {
   isObjectIdValid,
   isArrayOfObjIdValid,
   isDateValid
-} = require('./inputsValidator');
-const { response } = require('./response');
+} = require('../../utils/inputsValidator');
+const { response } = require('../../utils/response');
 
 exports.isNewUserValid = (newUser, res) => {
 

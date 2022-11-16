@@ -1,6 +1,6 @@
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
 const { NewEpicsService, AllEpicsService, EpicsServiceById, EpicsServiceByIdAllStories } = require('../services/EpicsService');
-const { isNewEpicValid } = require('../../utils/newItemsValidator');
+const { isNewEpicValid } = require('../helpers/newItemsValidator');
 
 exports.NewEpicsController = (token, newEpic, res) => {
 

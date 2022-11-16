@@ -1,5 +1,5 @@
 const Tasks = require("../models/TasksModel");
-const { createTask } = require('../../utils/modelCreators');
+const { createTask } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
 exports.AllTasksService = async (res) => {

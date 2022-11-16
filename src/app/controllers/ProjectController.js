@@ -1,5 +1,5 @@
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
-const { isNewProjectValid } = require('../../utils/newItemsValidator');
+const { isNewProjectValid } = require('../helpers/newItemsValidator');
 const { AllProjectService, NewProjectService, ProjectServiceById, ProjectServiceByIdAllEpics } = require('../services/ProjectsService');
 
 exports.NewProjectController = (token, newProject, res) => {
