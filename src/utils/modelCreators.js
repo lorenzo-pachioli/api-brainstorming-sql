@@ -2,6 +2,7 @@ const Epics = require('../app/models/EpicsModel');
 const Stories = require('../app/models/StoriesModel');
 const Projects = require('../app/models/ProjectsModel');
 const UsersBrainstorming = require('../app/models/UsersModel');
+const Tasks = require('../app/models/TasksModel');
 
 exports.createEpics = (newEpic) => {
   const { id, project, name, description, icon } = newEpic;
@@ -94,4 +95,34 @@ exports.createStories = (newStory) => {
   });
 
   return story;
+}
+
+exports.createTask = (newTask) => {
+  const {
+    id,
+    name,
+    description,
+    story,
+    created,
+    dueDate,
+    done,
+    icon
+  } = newTask;
+
+  if (!id || !name || !story) {
+    return;
+  }
+
+  const task = Tasks({
+    id: id,
+    name: name,
+    story: story,
+    description: description && description,
+    created: created && created,
+    dueDate: dueDate && dueDate,
+    done: done && done,
+    icon: icon && icon
+  });
+
+  return task;
 }

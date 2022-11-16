@@ -1,22 +1,16 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 
-exports.isNameValid = (name, res) => {
+exports.isNameValid = (name) => {
 
   if (!name || name.length < 4) {
-    res.status(400).json({
-      msj: 'Incorrect name'
-    });
     return false;
   }
   return true;
 }
 
-exports.isDescriptionValid = (description, res) => {
+exports.isDescriptionValid = (description) => {
 
   if (description && description.length < 10) {
-    res.status(400).json({
-      msj: 'Incorrect description'
-    });
     return false;
   }
   return true;

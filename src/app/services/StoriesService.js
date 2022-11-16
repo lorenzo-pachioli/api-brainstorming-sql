@@ -3,8 +3,8 @@ const Tasks = require('../models/TasksModel');
 const { createStories } = require('../../utils/modelCreators');
 
 exports.NewStoriesService = async (newStory, res) => {
-  try {
 
+  try {
     const storyAlreadyExist = await Stories.findOne({ id: newStory.id });
 
     if (storyAlreadyExist) {
@@ -33,7 +33,6 @@ exports.NewStoriesService = async (newStory, res) => {
 exports.AllStoriesService = async (res) => {
 
   try {
-
     const storiesList = await Stories.find();
 
     res.status(200).json({

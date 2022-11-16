@@ -35,10 +35,10 @@ exports.isNewProjectValid = (newProject, res) => {
   if (!name || !members) return response('Incorrect new project', 400, res);
 
   //Validate name
-  if (!isNameValid(name, res)) return false;
+  if (!isNameValid(name)) return response('Project name is invalid', 400, res);
 
   //Validate description
-  if (description && !isDescriptionValid(description, res)) return false;
+  if (description && !isDescriptionValid(description)) return response('Project description is invalid', 400, res);
 
   //Validate project members id
   if (!isArrayOfObjIdValid(members)) return response('Project members id invalid', 400, res);
@@ -53,10 +53,10 @@ exports.isNewEpicValid = (newEpic, res) => {
   if (!id || !name || !project) return response('Incorrect new project', 400, res);
 
   //Validate name
-  if (!isNameValid(name, res)) return false;
+  if (!isNameValid(name)) return response('Epic name is invalid', 400, res);
 
   //Validate description
-  if (description && !isDescriptionValid(description, res)) return false;
+  if (description && !isDescriptionValid(description)) return response('Epic description is invalid', 400, res);;
 
   //Validate project id
   if (!isObjectIdValid(project)) return response('Project id invalid', 400, res);
@@ -84,16 +84,16 @@ exports.isNewStoryValid = (newStory, res) => {
   if (!id || !name || !epic) return response('Incorrect new story', 400, res);
 
   //Validate name
-  if (!isNameValid(name, res)) return false;
+  if (!isNameValid(name)) return response('Story name is invalid', 400, res);
 
   //Validate description
-  if (description && !isDescriptionValid(description, res)) return false;
+  if (description && !isDescriptionValid(description)) return response('Story description is invalid', 400, res);
 
   //Validate epic id
   if (!isObjectIdValid(epic)) return response('Epic id invalid', 400, res);
 
   //Validate owner
-  if (owner && !isObjectIdValid(owner)) return response('Owner id invalid', 400, res);
+  if (owner && !isObjectIdValid(owner)) return response('Story owner id invalid', 400, res);
 
   //Validate assignedTo
   if (assignedTo && !isArrayOfObjIdValid(assignedTo)) return response('Story assignedTo id invalid', 400, res);
@@ -115,6 +115,45 @@ exports.isNewStoryValid = (newStory, res) => {
 
   //Validate finished
   if (finished && !isDateValid(finished)) return response('Story finished date is invalid', 400, res);
+
+  return true;
+}
+
+exports.isNewTaskValid = (newTask, res) => {
+  const {
+    _id,
+    id,
+    name,
+    description,
+    story,
+    created,
+    dueDate,
+    done
+  } = newTask;
+
+  //Validate required info
+  if (!id || !name || !story) return response('Incorrect new task', 400, res);
+
+  //Validate _id
+  if (!isObjectIdValid(_id)) return response('Task _id invalid', 400, res);
+
+  //Validate name
+  if (!isNameValid(name)) return response('Task name is invalid', 400, res);
+
+  //Validate description
+  if (description && !isDescriptionValid(description)) return response('Task description is invalid', 400, res);
+
+  //Validate story id
+  if (!isObjectIdValid(story)) return response('Story id invalid', 400, res);
+
+  //Validate created
+  if (created && !isDateValid(created)) return response('Task created date is invalid', 400, res);
+
+  //Validate dueDate
+  if (dueDate && !isDateValid(dueDate)) return response('Task dueDate is invalid', 400, res);
+
+  //Validate done
+  if (done && typeof done == "boolean") return response('Task done is invalid', 400, res);
 
   return true;
 }

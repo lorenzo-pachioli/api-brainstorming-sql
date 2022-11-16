@@ -1,11 +1,11 @@
 const express = require("express");
-const { TasksController, NewTasksController, TasksControllerById, ModifyTasksControllerById } = require('../controllers/TasksController');
+const { AllTasksController, NewTasksController, TasksControllerById, ModifyTasksControllerById } = require('../controllers/TasksController');
 const router = express.Router();
 
 router.get("", (req, res) => {
     const token = req.header('token');
 
-    TasksController(token, res);
+    AllTasksController(token, res);
 });
 
 router.post("", (req, res) => {

@@ -1,33 +1,21 @@
 const { tokenValidator } = require('../../utils/tokenValidator');
 const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenValid');
-const { TasksService, NewTasksService, TasksServiceById, ModifyTasksServiceById } = require('../services/TasksService');
+const { AllTasksService, NewTasksService, TasksServiceById, ModifyTasksServiceById } = require('../services/TasksService');
+const { isNewTaskValid } = require('../../utils/newItemsValidator');
 
-exports.TasksController = (token, res) => {
+exports.AllTasksController = (token, res) => {
 
-  isTokenValid(token, res) && TasksService(res);
+  isTokenValid(token, res) && AllTasksService(res);
 }
 
 exports.NewTasksController = (token, newTask, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
+  if (
+    isIdAndTokenValid(newTask.id, token, res) &&
+    isNewTaskValid(newTask, res)) {
+    NewTasksService(newTask, res);
   }
 
-  if (!newTask.name || newTask.name.length < 4) {
-    return res.status(400).json({
-      msj: 'Incorrect task name'
-    });
-  }
-
-  if (newTask.description && newTask.description.length < 10) {
-    return res.status(400).json({
-      msj: 'Incorrect task description'
-    });
-  }
-
-  NewTasksService(newTask, res);
 }
 
 exports.TasksControllerById = (token, id, res) => {
@@ -37,23 +25,11 @@ exports.TasksControllerById = (token, id, res) => {
 
 exports.ModifyTasksControllerById = (token, newTask, res) => {
 
-  if (!tokenValidator(token)) {
-    return res.status(401).json({
-      msj: 'Unauthorized'
-    });
+  if (
+    isIdAndTokenValid(newTask.id, token, res) &&
+    isNewTaskValid(newTask, res)) {
+    ModifyTasksServiceById(newTask, res);
   }
 
-  if (!newTask.name || newTask.name.length < 4) {
-    return res.status(400).json({
-      msj: 'Incorrect task name'
-    });
-  }
 
-  if (newTask.description && newTask.description.length < 10) {
-    return res.status(400).json({
-      msj: 'Incorrect task description'
-    });
-  }
-
-  ModifyTasksServiceById(newTask, res);
 }
