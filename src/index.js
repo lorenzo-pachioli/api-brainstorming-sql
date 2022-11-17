@@ -13,13 +13,9 @@ const usersRoutes = require('./app/routes/UsersRoutes');
 const { returnError } = require('./utils/response');
 const bodyParser = require("body-parser");
 app.set(express.json());
-app.use(cors({
-    origin: 'http://localhost:4200'
-}));
-/* app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
