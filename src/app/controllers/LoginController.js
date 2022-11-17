@@ -1,5 +1,6 @@
 const { LoginService } = require('../services/LoginService');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.LoginController = (body) => {
 
@@ -11,5 +12,5 @@ exports.LoginController = (body) => {
     password: body.password
   }
 
-  LoginService(user);
+  LoginService(user).catch(() => next(newError(`Couldn't login`, 500)));
 }

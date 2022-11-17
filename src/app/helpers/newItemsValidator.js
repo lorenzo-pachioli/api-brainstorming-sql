@@ -56,7 +56,7 @@ exports.isNewEpicValid = (newEpic) => {
   if (!isNameValid(name)) return response('Epic name is invalid', 400);
 
   //Validate description
-  if (description && !isDescriptionValid(description)) return response('Epic description is invalid', 400);;
+  if (description && !isDescriptionValid(description)) return response('Epic description is invalid', 400);
 
   //Validate project id
   if (!isObjectIdValid(project)) return response('Project id invalid', 400);
