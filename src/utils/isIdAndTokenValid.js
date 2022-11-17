@@ -5,7 +5,7 @@ const { response } = require('./response');
 exports.isIdAndTokenValid = (id, token) => {
 
   if (!tokenValidator(token)) return response('Unauthorized', 401);
-  if (!isIdInteger(id)) return response('Incorrect id number', 401);
+  if (!isIdInteger(id)) return response('Incorrect id number', 400);
   return true;
 }
 
