@@ -3,8 +3,19 @@ let globalNext;
 
 exports.response = (msj, code, content = []) => {
   globalRes.status(code).json({
-    msj,
-    content
+    success: code === 200 ? true : false,
+    message: msj,
+    data: content
+  });
+  return false;
+}
+
+exports.logInResponse = (msj, code, token = '', user = {}) => {
+  globalRes.status(code).json({
+    success: code === 200 ? true : false,
+    message: msj,
+    token,
+    user
   });
   return false;
 }
@@ -23,7 +34,7 @@ exports.setNext = (newNext) => {
 
 exports.returnError = (err, req, res) => {
   res.status(err.statusCode || 500).json({
-    msj: err.message,
-    content: []
+    message: err.message,
+    data: []
   });
 }
