@@ -32,8 +32,8 @@ exports.setNext = (newNext) => {
   globalNext = newNext;
 }
 
-exports.returnError = (err, req, res) => {
-  res.status(err.statusCode || 500).json({
+exports.returnError = (err, req, res, next) => {
+  globalRes.status(err.statusCode || 500).json({
     message: err.message,
     data: []
   });
