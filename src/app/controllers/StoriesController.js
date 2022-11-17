@@ -2,24 +2,24 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const { AllStoriesService, NewStoriesService, StoriesServiceById, StoriesServiceByIdAllTasks } = require('../services/StoriesService');
 const { isNewStoryValid } = require('../helpers/newItemsValidator');
 
-exports.NewStoriesController = (token, newStory, res) => {
+exports.NewStoriesController = (token, newStory) => {
 
-  if (isTokenValid(token, res) && isNewStoryValid(newStory, res)) {
-    NewStoriesService(newStory, res);
+  if (isTokenValid(token) && isNewStoryValid(newStory)) {
+    NewStoriesService(newStory);
   }
 }
 
-exports.AllStoriesController = (token, res) => {
+exports.AllStoriesController = (token) => {
 
-  isTokenValid(token, res) && AllStoriesService(res);
+  isTokenValid(token) && AllStoriesService();
 }
 
-exports.StoriesControllerById = (token, id, res) => {
+exports.StoriesControllerById = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && StoriesServiceById(id, res);
+  isIdAndTokenValid(id, token) && StoriesServiceById(id);
 }
 
-exports.StoriesControllerByIdAllTasks = (token, id, res) => {
+exports.StoriesControllerByIdAllTasks = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && StoriesServiceByIdAllTasks(id, res);
+  isIdAndTokenValid(id, token) && StoriesServiceByIdAllTasks(id);
 }

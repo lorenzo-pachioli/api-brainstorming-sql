@@ -2,32 +2,32 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const { AllTasksService, NewTasksService, TasksServiceById, ModifyTasksServiceById } = require('../services/TasksService');
 const { isNewTaskValid } = require('../helpers/newItemsValidator');
 
-exports.AllTasksController = (token, res) => {
+exports.AllTasksController = (token) => {
 
-  isTokenValid(token, res) && AllTasksService(res);
+  isTokenValid(token) && AllTasksService();
 }
 
-exports.NewTasksController = (token, newTask, res) => {
+exports.NewTasksController = (token, newTask) => {
 
   if (
-    isTokenValid(token, res) &&
-    isNewTaskValid(newTask, res)) {
-    NewTasksService(newTask, res);
+    isTokenValid(token) &&
+    isNewTaskValid(newTask)) {
+    NewTasksService(newTask);
   }
 
 }
 
-exports.TasksControllerById = (token, id, res) => {
+exports.TasksControllerById = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && TasksServiceById(id, res);
+  isIdAndTokenValid(id, token) && TasksServiceById(id);
 }
 
-exports.ModifyTasksControllerById = (token, newTask, res) => {
+exports.ModifyTasksControllerById = (token, newTask) => {
 
   if (
-    isIdAndTokenValid(newTask.id, token, res) &&
-    isNewTaskValid(newTask, res)) {
-    ModifyTasksServiceById(newTask, res);
+    isIdAndTokenValid(newTask.id, token) &&
+    isNewTaskValid(newTask)) {
+    ModifyTasksServiceById(newTask);
   }
 
 

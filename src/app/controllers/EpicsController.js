@@ -2,27 +2,27 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const { NewEpicsService, AllEpicsService, EpicsServiceById, EpicsServiceByIdAllStories } = require('../services/EpicsService');
 const { isNewEpicValid } = require('../helpers/newItemsValidator');
 
-exports.NewEpicsController = (token, newEpic, res) => {
+exports.NewEpicsController = (token, newEpic) => {
 
   if (
-    isTokenValid(token, res) &&
-    isNewEpicValid(newEpic, res)) {
-    NewEpicsService(newEpic, res);
+    isTokenValid(token) &&
+    isNewEpicValid(newEpic)) {
+    NewEpicsService(newEpic);
   }
 
 }
 
-exports.AllEpicsController = (token, res) => {
+exports.AllEpicsController = (token) => {
 
-  isTokenValid(token, res) && AllEpicsService(res);
+  isTokenValid(token) && AllEpicsService();
 }
 
-exports.EpicsControllerById = (token, id, res) => {
+exports.EpicsControllerById = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && EpicsServiceById(id, res);
+  isIdAndTokenValid(id, token) && EpicsServiceById(id);
 }
 
-exports.EpicsControllerByIdAllStories = (token, id, res) => {
+exports.EpicsControllerByIdAllStories = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && EpicsServiceByIdAllStories(id, res);
+  isIdAndTokenValid(id, token) && EpicsServiceByIdAllStories(id);
 }

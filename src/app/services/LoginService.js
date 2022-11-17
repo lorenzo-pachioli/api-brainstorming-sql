@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const UsersBrainstorming = require('../models/UsersModel');
 const { response } = require('../../utils/response');
 
-exports.LoginService = async (user, res) => {
+exports.LoginService = async (user) => {
 
   try {
     const userExist = await UsersBrainstorming.findOne({ username: user.username });
@@ -15,13 +15,13 @@ exports.LoginService = async (user, res) => {
       };
       const token = jwt.sign(data, jwtSecretKey);
 
-      return response(`Correct login user ${user.username}`, 200, res, token);
+      return response(`Correct login user ${user.username}`, 200, token);
     }
 
-    return response(`User ${user.username} doesn't exist`, 200, res, "");
+    return response(`User ${user.username} doesn't exist`, 200, "");
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't login`, 503, res);
+    return response(`Couldn't login`, 503);
   }
 }

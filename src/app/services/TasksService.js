@@ -2,65 +2,65 @@ const Tasks = require("../models/TasksModel");
 const { createTask } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 
-exports.AllTasksService = async (res) => {
+exports.AllTasksService = async () => {
 
   try {
     const tasksList = await Tasks.find();
 
-    return response(`Tasks list`, 200, res, tasksList);
+    return response(`Tasks list`, 200, tasksList);
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't get tasks list`, 503, res);
+    return response(`Couldn't get tasks list`, 503);
   }
 }
 
-exports.NewTasksService = async (newTask, res) => {
+exports.NewTasksService = async (newTask) => {
 
   try {
     const taskAlreadyExist = await Tasks.findOne({ name: newTask.name });
-    if (taskAlreadyExist) return response(`Task with name '${newTask.name}' already exist`, 200, res, {});
+    if (taskAlreadyExist) return response(`Task with name '${newTask.name}' already exist`, 200, {});
 
     const tasksList = await Tasks.find();
     const newMaxId = tasksList.length + 1;
     const task = createTask(newMaxId, newTask);
     task.save();
 
-    return response(`Task created succesfully`, 200, res, task);
+    return response(`Task created succesfully`, 200, task);
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't save task`, 503, res);
+    return response(`Couldn't save task`, 503);
   }
 }
 
-exports.TasksServiceById = async (id, res) => {
+exports.TasksServiceById = async (id) => {
 
   try {
     const taskById = await Tasks.findOne({ id: id });
-    if (taskById) return response(`Task ${id}`, 200, res, taskById);
+    if (taskById) return response(`Task ${id}`, 200, taskById);
 
-    return response(`Task ${id} doesn't exist`, 200, res, {});
+    return response(`Task ${id} doesn't exist`, 200, {});
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't get task`, 503, res);
+    return response(`Couldn't get task`, 503);
   }
 }
 
-exports.ModifyTasksServiceById = async (newTask, res) => {
+exports.ModifyTasksServiceById = async (newTask) => {
 
   try {
     const taskUpdated = await Tasks.findOneAndUpdate({ _id: newTask._id }, newTask, { new: true });
-    if (taskUpdated) return response(`Task ${newTask.id} updated`, 200, res, taskUpdated);
+    if (taskUpdated) return response(`Task ${newTask.id} updated`, 200, taskUpdated);
 
     const taskExist = await Tasks.findById(newTask._id);
-    if (!taskExist) return response(`Task ${newTask._id} doesn't exist`, 200, res, {});
+    if (!taskExist) return response(`Task ${newTask._id} doesn't exist`, 200, {});
 
-    return response(`Couldn't update task`, 200, res, {});
+    return response(`Couldn't update task`, 200, {});
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't update task`, 503, res);
+    return response(`Couldn't update task`, 503);
   }
 }

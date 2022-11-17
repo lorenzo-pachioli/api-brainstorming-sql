@@ -21,56 +21,56 @@ function passwordRemove(users) {
   }
 }
 
-exports.NewUsersService = async (newUser, res) => {
+exports.NewUsersService = async (newUser) => {
 
   try {
     const userAlreadyExist = await UsersBrainstorming.findOne({ username: newUser.username });
-    if (userAlreadyExist) return response(`Username '${newUser.username}' already exist`, 200, res, {});
+    if (userAlreadyExist) return response(`Username '${newUser.username}' already exist`, 200, {});
 
     const userList = await UsersBrainstorming.find();
     const newMaxId = userList.length + 1;
     const user = createUsers(newMaxId, newUser);
     user.save();
 
-    return response(`User created succesfully`, 200, res, user);
+    return response(`User created succesfully`, 200, user);
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't save epic`, 503, res);
+    return response(`Couldn't save epic`, 503);
   }
 }
 
-exports.AllUsersService = async (res) => {
+exports.AllUsersService = async () => {
 
   try {
     const userList = await UsersBrainstorming.find();
     if (userList.length > 0) {
       const userListWithoutPass = passwordRemove(userList);
-      return response(`User list`, 200, res, userListWithoutPass);
+      return response(`User list`, 200, userListWithoutPass);
     }
 
-    return response(`User list is empty`, 200, res);
+    return response(`User list is empty`, 200);
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't get users list`, 503, res);
+    return response(`Couldn't get users list`, 503);
   }
 }
 
-exports.UsersServiceById = async (id, res) => {
+exports.UsersServiceById = async (id) => {
 
   try {
     const user = await UsersBrainstorming.findOne({ id: id });
 
     if (user) {
       const userWithoutPassword = passwordRemove(user);
-      return response(`User ${id}`, 200, res, userWithoutPassword);
+      return response(`User ${id}`, 200, userWithoutPassword);
     }
 
-    return response(`User ${id} doesn't exist`, 200, res, {});
+    return response(`User ${id} doesn't exist`, 200, {});
 
   } catch (err) {
     console.log(err);
-    return response(`Couldn't get user ${id}`, 503, res);
+    return response(`Couldn't get user ${id}`, 503);
   }
 }

@@ -2,24 +2,24 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const { isNewProjectValid } = require('../helpers/newItemsValidator');
 const { AllProjectService, NewProjectService, ProjectServiceById, ProjectServiceByIdAllEpics } = require('../services/ProjectsService');
 
-exports.NewProjectController = (token, newProject, res) => {
+exports.NewProjectController = (token, newProject) => {
 
-  if (isTokenValid(token, res) && isNewProjectValid(newProject, res)) {
-    NewProjectService(newProject, res);
+  if (isTokenValid(token) && isNewProjectValid(newProject)) {
+    NewProjectService(newProject);
   }
 }
 
-exports.AllProjectController = (token, res) => {
+exports.AllProjectController = (token) => {
 
-  isTokenValid(token, res) && AllProjectService(res);
+  isTokenValid(token) && AllProjectService();
 }
 
-exports.ProjectControllerById = (token, id, res) => {
+exports.ProjectControllerById = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && ProjectServiceById(id, res);
+  isIdAndTokenValid(id, token) && ProjectServiceById(id);
 }
 
-exports.ProjectControllerByIdAllEpics = (token, id, res) => {
+exports.ProjectControllerByIdAllEpics = (token, id) => {
 
-  isIdAndTokenValid(id, token, res) && ProjectServiceByIdAllEpics(id, res);
+  isIdAndTokenValid(id, token) && ProjectServiceByIdAllEpics(id);
 }
