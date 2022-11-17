@@ -16,10 +16,8 @@ app.set(express.json());
 app.use(cors({
     origin: 'http://localhost:4200'
 }));
-/* app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); */
-app.use(express.json());
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
