@@ -4,7 +4,7 @@ const { AllProjectService, NewProjectService, ProjectServiceById, ProjectService
 
 exports.NewProjectController = (token, newProject, res) => {
 
-  if (isIdAndTokenValid(newProject.id, token, res) && isNewProjectValid(newProject, res)) {
+  if (isTokenValid(token, res) && isNewProjectValid(newProject, res)) {
     NewProjectService(newProject, res);
   }
 }

@@ -6,10 +6,12 @@ const { response } = require('../../utils/response');
 exports.NewStoriesService = async (newStory, res) => {
 
   try {
-    const storyAlreadyExist = await Stories.findOne({ id: newStory.id });
-    if (storyAlreadyExist) return response(`Story already exist`, 200, res, {});
+    const storyAlreadyExist = await Stories.findOne({ name: newStory.name });
+    if (storyAlreadyExist) return response(`Story with name '${newStory.name}' already exist`, 200, res, {});
 
-    const story = createStories(newStory);
+    const epicsList = await Stories.find();
+    const newMaxId = epicsList.length + 1;
+    const story = createStories(newMaxId, newStory);
     story.save();
 
     return response(`Story created succesfully`, 200, res, story);

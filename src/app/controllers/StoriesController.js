@@ -4,7 +4,7 @@ const { isNewStoryValid } = require('../helpers/newItemsValidator');
 
 exports.NewStoriesController = (token, newStory, res) => {
 
-  if (isIdAndTokenValid(newStory.id, token, res) && isNewStoryValid(newStory, res)) {
+  if (isTokenValid(token, res) && isNewStoryValid(newStory, res)) {
     NewStoriesService(newStory, res);
   }
 }

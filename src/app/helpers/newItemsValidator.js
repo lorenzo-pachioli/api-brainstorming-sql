@@ -47,10 +47,10 @@ exports.isNewProjectValid = (newProject, res) => {
 }
 
 exports.isNewEpicValid = (newEpic, res) => {
-  const { id, project, name, description } = newEpic;
+  const { project, name, description } = newEpic;
 
   //Validate required info
-  if (!id || !name || !project) return response('Incorrect new project', 400, res);
+  if (!name || !project) return response('Incorrect new project', 400, res);
 
   //Validate name
   if (!isNameValid(name)) return response('Epic name is invalid', 400, res);
@@ -66,7 +66,6 @@ exports.isNewEpicValid = (newEpic, res) => {
 
 exports.isNewStoryValid = (newStory, res) => {
   const {
-    id,
     name,
     epic,
     description,
@@ -81,7 +80,7 @@ exports.isNewStoryValid = (newStory, res) => {
   } = newStory;
 
   //Validate required info
-  if (!id || !name || !epic) return response('Incorrect new story', 400, res);
+  if (!name || !epic) return response('Incorrect new story', 400, res);
 
   //Validate name
   if (!isNameValid(name)) return response('Story name is invalid', 400, res);
@@ -121,8 +120,6 @@ exports.isNewStoryValid = (newStory, res) => {
 
 exports.isNewTaskValid = (newTask, res) => {
   const {
-    _id,
-    id,
     name,
     description,
     story,
@@ -132,10 +129,7 @@ exports.isNewTaskValid = (newTask, res) => {
   } = newTask;
 
   //Validate required info
-  if (!id || !name || !story) return response('Incorrect new task', 400, res);
-
-  //Validate _id
-  if (!isObjectIdValid(_id)) return response('Task _id invalid', 400, res);
+  if (!name || !story) return response('Incorrect new task', 400, res);
 
   //Validate name
   if (!isNameValid(name)) return response('Task name is invalid', 400, res);

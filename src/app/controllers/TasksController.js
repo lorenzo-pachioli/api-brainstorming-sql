@@ -10,7 +10,7 @@ exports.AllTasksController = (token, res) => {
 exports.NewTasksController = (token, newTask, res) => {
 
   if (
-    isIdAndTokenValid(newTask.id, token, res) &&
+    isTokenValid(token, res) &&
     isNewTaskValid(newTask, res)) {
     NewTasksService(newTask, res);
   }

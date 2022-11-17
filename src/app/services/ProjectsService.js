@@ -6,10 +6,12 @@ const { response } = require('../../utils/response');
 exports.NewProjectService = async (newProject, res) => {
 
   try {
-    const projectAlreadyExist = await Projects.findOne({ id: newProject.id });
-    if (projectAlreadyExist) return response(`Project already exist`, 200, res, {});
+    const projectAlreadyExist = await Projects.findOne({ name: newProject.name });
+    if (projectAlreadyExist) return response(`Project with name '${newProject.name}' already exist`, 200, res, {});
 
-    const project = createProjects(newProject);
+    const projectsList = await Projects.find();
+    const newMaxId = projectsList.length + 1;
+    const project = createProjects(newMaxId, newProject);
     project.save();
 
     return response(`Project created succesfully`, 200, res, project);

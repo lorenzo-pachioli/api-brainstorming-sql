@@ -5,7 +5,7 @@ const { isNewEpicValid } = require('../helpers/newItemsValidator');
 exports.NewEpicsController = (token, newEpic, res) => {
 
   if (
-    isIdAndTokenValid(newEpic.id, token, res) &&
+    isTokenValid(token, res) &&
     isNewEpicValid(newEpic, res)) {
     NewEpicsService(newEpic, res);
   }

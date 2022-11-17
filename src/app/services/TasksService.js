@@ -18,10 +18,12 @@ exports.AllTasksService = async (res) => {
 exports.NewTasksService = async (newTask, res) => {
 
   try {
-    const taskAlreadyExist = await Tasks.findOne({ id: newTask.id });
-    if (taskAlreadyExist) return response(`Task already exist`, 200, res, {});
+    const taskAlreadyExist = await Tasks.findOne({ name: newTask.name });
+    if (taskAlreadyExist) return response(`Task with name '${newTask.name}' already exist`, 200, res, {});
 
-    const task = createTask(newTask);
+    const tasksList = await Tasks.find();
+    const newMaxId = tasksList.length + 1;
+    const task = createTask(newMaxId, newTask);
     task.save();
 
     return response(`Task created succesfully`, 200, res, task);

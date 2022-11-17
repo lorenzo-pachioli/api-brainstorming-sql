@@ -7,13 +7,15 @@ const { response } = require('../../utils/response');
 exports.NewEpicsService = async (newEpic, res) => {
 
   try {
-    const epicAlreadyExist = await Epics.findOne({ id: newEpic.id });
+    const epicAlreadyExist = await Epics.findOne({ name: newEpic.name });
     const epicHasProject = await Projects.findById(newEpic.project);
 
-    if (epicAlreadyExist) return response(`Epic with id ${newEpic.id} already exist`, 200, res, epicAlreadyExist);
+    if (epicAlreadyExist) return response(`Epic with name '${newEpic.name}' already exist`, 200, res, {});
     if (!epicHasProject) return response(`The project you're assigning the epic doesn't exist`, 200, res);
 
-    const epic = createEpics(newEpic);
+    const epicsList = await Epics.find();
+    const newMaxId = epicsList.length + 1;
+    const epic = createEpics(newMaxId, newEpic);
     epic.save();
     return response(`Epic created succesfully`, 200, res, epic);
 
