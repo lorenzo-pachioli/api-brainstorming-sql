@@ -8,19 +8,19 @@ const { isNewUserValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
-exports.NewUsersController = (token, newUser) => {
+exports.NewUsersController = (token, newUser, res) => {
 
-  if (isTokenValid(token) && isNewUserValid(newUser)) {
-    NewUsersService(newUser).catch(() => next(newError(`Couldn't create new user`, 500)));
+  if (isTokenValid(token, res) && isNewUserValid(newUser, res)) {
+    NewUsersService(newUser, res).catch(() => next(newError(`Couldn't create new user`, 500)));
   }
 }
 
-exports.AllUsersController = (token) => {
+exports.AllUsersController = (token, res) => {
 
-  isTokenValid(token) && AllUsersService().catch(() => next(newError(`Couldn't get users list`, 500)));
+  isTokenValid(token, res) && AllUsersService(res).catch(() => next(newError(`Couldn't get users list`, 500)));
 }
 
-exports.UsersControllerById = (token, id) => {
+exports.UsersControllerById = (token, id, res) => {
 
-  isIdAndTokenValid(id, token) && UsersServiceById(id).catch(() => next(newError(`Couldn't get user ${id}`, 500)));
+  isIdAndTokenValid(id, token, res) && UsersServiceById(id, res).catch(() => next(newError(`Couldn't get user ${id}`, 500)));
 }

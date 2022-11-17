@@ -9,24 +9,24 @@ const { isNewStoryValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
-exports.NewStoriesController = (token, newStory) => {
+exports.NewStoriesController = (token, newStory, res) => {
 
-  if (isTokenValid(token) && isNewStoryValid(newStory)) {
-    NewStoriesService(newStory).catch(() => next(newError(`Couldn't save story`, 500)));
+  if (isTokenValid(token, res) && isNewStoryValid(newStory, res)) {
+    NewStoriesService(newStory, res).catch(() => next(newError(`Couldn't save story`, 500)));
   }
 }
 
-exports.AllStoriesController = (token) => {
+exports.AllStoriesController = (token, res) => {
 
-  isTokenValid(token) && AllStoriesService().catch(() => next(newError(`Couldn't get stories list`, 500)));
+  isTokenValid(token, res) && AllStoriesService(res).catch(() => next(newError(`Couldn't get stories list`, 500)));
 }
 
-exports.StoriesControllerById = (token, id) => {
+exports.StoriesControllerById = (token, id, res) => {
 
-  isIdAndTokenValid(id, token) && StoriesServiceById(id).catch(() => next(newError(`Couldn't get story`, 500)));
+  isIdAndTokenValid(id, token, res) && StoriesServiceById(id, res).catch(() => next(newError(`Couldn't get story`, 500)));
 }
 
-exports.StoriesControllerByIdAllTasks = (token, id) => {
+exports.StoriesControllerByIdAllTasks = (token, id, res) => {
 
-  isIdAndTokenValid(id, token) && StoriesServiceByIdAllTasks(id).catch(() => next(newError(`Couldn't get tasks list for story ${id}`, 500)));
+  isIdAndTokenValid(id, token, res) && StoriesServiceByIdAllTasks(id, res).catch(() => next(newError(`Couldn't get tasks list for story ${id}`, 500)));
 }

@@ -1,8 +1,8 @@
 let globalRes;
 let globalNext;
 
-exports.response = (msj, code, content = []) => {
-  globalRes.status(code).json({
+exports.response = (msj, res, code, content = []) => {
+  res.status(code).json({
     success: code === 200 ? true : false,
     message: msj,
     data: content
@@ -10,8 +10,8 @@ exports.response = (msj, code, content = []) => {
   return false;
 }
 
-exports.logInResponse = (msj, code, token = '', user = {}) => {
-  globalRes.status(code).json({
+exports.logInResponse = (msj, res, code, token = '', user = {}) => {
+  res.status(code).json({
     success: code === 200 ? true : false,
     message: msj,
     token,
@@ -33,7 +33,7 @@ exports.setNext = (newNext) => {
 }
 
 exports.returnError = (err, req, res, next) => {
-  globalRes.status(err.statusCode || 500).json({
+  res.status(err.statusCode || 500).json({
     message: err.message,
     data: []
   });

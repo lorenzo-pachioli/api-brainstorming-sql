@@ -3,7 +3,7 @@ const UsersBrainstorming = require('../models/UsersModel');
 const { logInResponse } = require('../../utils/response');
 const { passwordRemove } = require('../../utils/passwordRemover');
 
-exports.LoginService = async (user) => {
+exports.LoginService = async (user, res) => {
 
   const userExist = await UsersBrainstorming.findOne({ username: user.username });
 
@@ -16,8 +16,8 @@ exports.LoginService = async (user) => {
     const token = jwt.sign(data, jwtSecretKey);
     const userWithoutPass = passwordRemove(userExist);
 
-    return logInResponse(`Correct login user ${user.username}`, 200, token, userWithoutPass);
+    return logInResponse(`Correct login user ${user.username}`, res, 200, token, userWithoutPass);
   }
 
-  return logInResponse(`User ${user.username} doesn't exist`, 200);
+  return logInResponse(`User ${user.username} doesn't exist`, res, 200);
 }

@@ -9,24 +9,24 @@ const {
 const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
-exports.NewProjectController = (token, newProject) => {
+exports.NewProjectController = (token, newProject, res) => {
 
-  if (isTokenValid(token) && isNewProjectValid(newProject)) {
-    NewProjectService(newProject).catch(() => next(newError(`Couldn't save project`, 500)));
+  if (isTokenValid(token, res) && isNewProjectValid(newProject, res)) {
+    NewProjectService(newProject, res).catch(() => next(newError(`Couldn't save project`, 500)));
   }
 }
 
-exports.AllProjectController = (token) => {
+exports.AllProjectController = (token, res) => {
 
-  isTokenValid(token) && AllProjectService().catch(() => next(newError(`Couldn't get project list`, 500)));
+  isTokenValid(token, res) && AllProjectService(res).catch(() => next(newError(`Couldn't get project list`, 500)));
 }
 
-exports.ProjectControllerById = (token, id) => {
+exports.ProjectControllerById = (token, id, res) => {
 
-  isIdAndTokenValid(id, token) && ProjectServiceById(id).catch(() => next(newError(`Couldn't get project list`, 500)));
+  isIdAndTokenValid(id, token, res) && ProjectServiceById(id, res).catch(() => next(newError(`Couldn't get project list`, 500)));
 }
 
-exports.ProjectControllerByIdAllEpics = (token, id) => {
+exports.ProjectControllerByIdAllEpics = (token, id, res) => {
 
-  isIdAndTokenValid(id, token) && ProjectServiceByIdAllEpics(id).catch(() => next(newError(`Couldn't get epic list for project ${id}`, 500)));
+  isIdAndTokenValid(id, token, res) && ProjectServiceByIdAllEpics(id, res).catch(() => next(newError(`Couldn't get epic list for project ${id}`, 500)));
 }

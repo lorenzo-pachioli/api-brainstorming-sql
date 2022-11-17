@@ -1,45 +1,41 @@
 const express = require("express");
 const { AllProjectController, NewProjectController, ProjectControllerById, ProjectControllerByIdAllEpics } = require('../controllers/ProjectController');
 const router = express.Router();
-const { setRes, setNext } = require('../../utils/response');
+const { setNext } = require('../../utils/response');
 
 router.post("", (req, res, next) => {
 
     const newProject = req.body;
     const token = req.header('token');
-    setRes(res);
     setNext(next);
 
-    NewProjectController(token, newProject);
+    NewProjectController(token, newProject, res);
 });
 
 router.get("", (req, res, next) => {
 
     const token = req.header('token');
-    setRes(res);
     setNext(next);
 
-    AllProjectController(token);
+    AllProjectController(token, res);
 });
 
 router.get("/:id", (req, res, next) => {
 
     const id = req.params.id;
     const token = req.header('token');
-    setRes(res);
     setNext(next);
 
-    ProjectControllerById(token, id);
+    ProjectControllerById(token, id, res);
 });
 
 router.get("/:id/epics", (req, res, next) => {
 
     const id = req.params.id;
     const token = req.header('token');
-    setRes(res);
     setNext(next);
 
-    ProjectControllerByIdAllEpics(token, id);
+    ProjectControllerByIdAllEpics(token, id, res);
 });
 
 module.exports = router;
