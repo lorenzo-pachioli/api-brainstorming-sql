@@ -3,12 +3,14 @@ const { AllTasksController, NewTasksController, TasksControllerById, ModifyTasks
 const router = express.Router();
 
 router.get("", (req, res) => {
+
     const token = req.header('token');
 
     AllTasksController(token, res);
 });
 
 router.post("", (req, res) => {
+
     const newTask = req.body;
     const token = req.header('token');
 
@@ -16,16 +18,16 @@ router.post("", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+
     const id = req.params.id;
     const token = req.header('token');
 
     TasksControllerById(token, id, res);
 });
 
-router.put("/:id", (req, res) => {
-    const id = req.params.id;
+router.put("", (req, res) => {
+
     const newTask = req.body;
-    newTask.id = id;
     const token = req.header('token');
 
     ModifyTasksControllerById(token, newTask, res);
