@@ -1,7 +1,8 @@
 const Stories = require('../models/StoriesModel');
 const Tasks = require('../models/TasksModel');
 const { createStories } = require('../helpers/modelCreators');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.NewStoriesService = async (newStory) => {
 
@@ -17,8 +18,7 @@ exports.NewStoriesService = async (newStory) => {
     return response(`Story created succesfully`, 200, story);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't save story`, 503);
+    next(newError(`Couldn't save story`, 500));
   }
 }
 
@@ -30,8 +30,7 @@ exports.AllStoriesService = async () => {
     return response(`Stories list`, 200, storiesList);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get stories list`, 503);
+    next(newError(`Couldn't get stories list`, 500));
   }
 }
 
@@ -44,8 +43,7 @@ exports.StoriesServiceById = async (id) => {
     return response(`Story ${id} doesn't exist`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get story`, 503);
+    next(newError(`Couldn't get story`, 500));
   }
 }
 
@@ -61,7 +59,6 @@ exports.StoriesServiceByIdAllTasks = async (id) => {
     return response(`Tasks for story ${id}`, 200);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get tasks list for story ${id}`, 503);
+    next(newError(`Couldn't get tasks list for story ${id}`, 500));
   }
 }

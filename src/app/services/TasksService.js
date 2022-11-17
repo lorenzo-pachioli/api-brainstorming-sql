@@ -1,6 +1,7 @@
 const Tasks = require("../models/TasksModel");
 const { createTask } = require('../helpers/modelCreators');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.AllTasksService = async () => {
 
@@ -10,8 +11,7 @@ exports.AllTasksService = async () => {
     return response(`Tasks list`, 200, tasksList);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get tasks list`, 503);
+    next(newError(`Couldn't get tasks list`, 500));
   }
 }
 
@@ -29,8 +29,7 @@ exports.NewTasksService = async (newTask) => {
     return response(`Task created succesfully`, 200, task);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't save task`, 503);
+    next(newError(`Couldn't save task`, 500));
   }
 }
 
@@ -43,8 +42,7 @@ exports.TasksServiceById = async (id) => {
     return response(`Task ${id} doesn't exist`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get task`, 503);
+    next(newError(`Couldn't get task`, 500));
   }
 }
 
@@ -60,7 +58,6 @@ exports.ModifyTasksServiceById = async (newTask) => {
     return response(`Couldn't update task`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't update task`, 503);
+    next(newError(`Couldn't update task`, 500));
   }
 }

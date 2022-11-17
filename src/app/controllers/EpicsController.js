@@ -9,7 +9,6 @@ exports.NewEpicsController = (token, newEpic) => {
     isNewEpicValid(newEpic)) {
     NewEpicsService(newEpic);
   }
-
 }
 
 exports.AllEpicsController = (token) => {

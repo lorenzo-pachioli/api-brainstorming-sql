@@ -2,7 +2,8 @@ const Epics = require('../models/EpicsModel');
 const Stories = require('../models/StoriesModel');
 const Projects = require('../models/ProjectsModel');
 const { createEpics } = require('../helpers/modelCreators');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.NewEpicsService = async (newEpic) => {
 
@@ -20,8 +21,7 @@ exports.NewEpicsService = async (newEpic) => {
     return response(`Epic created succesfully`, 200, epic);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't save epic`, 503);
+    next(newError(`Couldn't save epic`, 500));
   }
 }
 
@@ -33,8 +33,7 @@ exports.AllEpicsService = async () => {
     return response(`Epic list`, 200, epics);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get epic list`, 503);
+    next(newError(`Couldn't get epic list`, 500));
   }
 }
 
@@ -47,8 +46,7 @@ exports.EpicsServiceById = async (id) => {
     return response(`Epic ${id} doesn't exist`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get epic`, 503);
+    next(newError(`Couldn't get epic`, 500));
   }
 }
 
@@ -64,7 +62,6 @@ exports.EpicsServiceByIdAllStories = async (id) => {
     return response(`There're no stories for epic ${id}`, 200);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get story list for epic ${id}`, 503);
+    next(newError(`Couldn't get story list for epic ${id}`, 500));
   }
 }

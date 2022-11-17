@@ -1,6 +1,7 @@
 const UsersBrainstorming = require('../models/UsersModel');
 const { createUsers } = require('../helpers/modelCreators');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 function passwordRemove(users) {
   if (Array.isArray(users)) {
@@ -35,8 +36,7 @@ exports.NewUsersService = async (newUser) => {
     return response(`User created succesfully`, 200, user);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't save epic`, 503);
+    next(newError(`Couldn't create new user`, 500));
   }
 }
 
@@ -52,8 +52,7 @@ exports.AllUsersService = async () => {
     return response(`User list is empty`, 200);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get users list`, 503);
+    next(newError(`Couldn't get users list`, 500));
   }
 }
 
@@ -70,7 +69,6 @@ exports.UsersServiceById = async (id) => {
     return response(`User ${id} doesn't exist`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get user ${id}`, 503);
+    next(newError(`Couldn't get user ${id}`, 500));
   }
 }

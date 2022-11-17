@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UsersBrainstorming = require('../models/UsersModel');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.LoginService = async (user) => {
 
@@ -21,7 +22,6 @@ exports.LoginService = async (user) => {
     return response(`User ${user.username} doesn't exist`, 200, "");
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't login`, 503);
+    next(newError(`Couldn't login`, 500));
   }
 }

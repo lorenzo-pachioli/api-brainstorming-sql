@@ -1,7 +1,8 @@
 const Projects = require('../models/ProjectsModel');
 const Epics = require('../models/EpicsModel');
 const { createProjects } = require('../helpers/modelCreators');
-const { response } = require('../../utils/response');
+const { response, next } = require('../../utils/response');
+const { newError } = require('../../utils/errorModeling');
 
 exports.NewProjectService = async (newProject) => {
 
@@ -17,8 +18,7 @@ exports.NewProjectService = async (newProject) => {
     return response(`Project created succesfully`, 200, project);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't save project`, 503);
+    next(newError(`Couldn't save project`, 500));
   }
 }
 
@@ -30,8 +30,7 @@ exports.AllProjectService = async () => {
     return response(`Project list`, 200, projectsList);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get project list`, 503);
+    next(newError(`Couldn't get project list`, 500));
   }
 }
 
@@ -44,8 +43,7 @@ exports.ProjectServiceById = async (id) => {
     return response(`Project list`, 200, {});
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get project`, 503);
+    next(newError(`Couldn't get project list`, 500));
   }
 }
 
@@ -61,7 +59,6 @@ exports.ProjectServiceByIdAllEpics = async (id) => {
     return response(`There're no epics for project ${id}`, 200);
 
   } catch (err) {
-    console.log(err);
-    return response(`Couldn't get epic list for project ${id}`, 503);
+    next(newError(`Couldn't get epic list for project ${id}`, 500));
   }
 }
