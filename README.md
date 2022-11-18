@@ -21,6 +21,7 @@
 | /tasks                      |	GET           |	Recupera un listado de Tareas	              |
 | /tasks/:id                  |	GET           |	Recupera una Tarea	                        |
 | /tasks/:id                  |	PUT/PATCH     | Modifica una Tarea	                        |
+| /tasks/:id                  |	DELETE        | Borra una Tarea	                            |
 | /users                      |	POST          |	Permite crear un user	                      |
 | /users                      |	GET           |	Recupera un listado de Users	              |
 | /users/:_id                 |	GET           |	Recupera un User (_id es un OID)	          |
