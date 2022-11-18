@@ -3,6 +3,7 @@ const {
   AllTasksService,
   NewTasksService,
   TasksServiceById,
+  TasksDeleteByIdService,
   ModifyTasksServiceById
 } = require('../services/TasksService');
 const { isNewTaskValid } = require('../helpers/newItemsValidator');
@@ -26,6 +27,11 @@ exports.NewTasksController = (token, newTask, res) => {
 exports.TasksControllerById = (token, id, res) => {
 
   isIdAndTokenValid(id, token, res) && TasksServiceById(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
+}
+
+exports.TasksDeleteControllerById = (token, id, res) => {
+
+  isIdAndTokenValid(id, token, res) && TasksDeleteByIdService(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
 }
 
 exports.ModifyTasksControllerById = (token, newTask, res) => {

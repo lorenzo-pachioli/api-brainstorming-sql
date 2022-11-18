@@ -1,5 +1,11 @@
 const express = require("express");
-const { AllTasksController, NewTasksController, TasksControllerById, ModifyTasksControllerById } = require('../controllers/TasksController');
+const {
+    AllTasksController,
+    NewTasksController,
+    TasksControllerById,
+    TasksDeleteControllerById,
+    ModifyTasksControllerById
+} = require('../controllers/TasksController');
 const router = express.Router();
 const { setNext } = require('../../utils/response');
 
@@ -27,6 +33,15 @@ router.get("/:id", (req, res, next) => {
     setNext(next);
 
     TasksControllerById(token, id, res);
+});
+
+router.delete("/:id", (req, res, next) => {
+
+    const id = req.params.id;
+    const token = req.header('token');
+    setNext(next);
+
+    TasksDeleteControllerById(token, id, res);
 });
 
 router.put("", (req, res, next) => {

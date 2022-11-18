@@ -30,6 +30,14 @@ exports.TasksServiceById = async (id, res) => {
   return response(`Task ${id} doesn't exist`, res, 200, {});
 }
 
+exports.TasksDeleteByIdService = async (id, res) => {
+
+  const taskById = await Tasks.remove({ id: id });
+  if (taskById) return response(`Task ${id}`, res, 200, taskById);
+
+  return response(`Task ${id} doesn't exist`, res, 200, {});
+}
+
 exports.ModifyTasksServiceById = async (newTask, res) => {
 
   const taskUpdated = await Tasks.findOneAndUpdate({ _id: newTask._id }, newTask, { new: true });
