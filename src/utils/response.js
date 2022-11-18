@@ -7,7 +7,7 @@ exports.response = (msj, res, code, content = []) => {
     message: msj,
     data: content
   });
-  return false;
+  return true;
 }
 
 exports.logInResponse = (msj, res, code, token = '', user = {}) => {
@@ -17,7 +17,7 @@ exports.logInResponse = (msj, res, code, token = '', user = {}) => {
     token,
     user
   });
-  return false;
+  return true;
 }
 
 exports.next = (msj) => {

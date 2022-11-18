@@ -2,7 +2,8 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const {
   NewUsersService,
   AllUsersService,
-  UsersServiceById
+  UsersServiceById,
+  ModifyUsersService
 } = require('../services/UsersService');
 const { isNewUserValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
@@ -23,4 +24,11 @@ exports.AllUsersController = (token, res) => {
 exports.UsersControllerById = (token, id, res) => {
 
   isIdAndTokenValid(id, token, res) && UsersServiceById(id, res).catch(() => next(newError(`Couldn't get user ${id}`, 500)));
+}
+
+exports.ModifyUserController = (token, newUser, res) => {
+
+  if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
+    ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
+  }
 }

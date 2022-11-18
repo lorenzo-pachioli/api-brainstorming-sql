@@ -1,5 +1,10 @@
 const express = require("express");
-const { AllUsersController, NewUsersController, UsersControllerById } = require('../controllers/UsersController');
+const {
+    AllUsersController,
+    NewUsersController,
+    UsersControllerById,
+    ModifyUserController
+} = require('../controllers/UsersController');
 const router = express.Router();
 const { setNext } = require('../../utils/response');
 
@@ -24,6 +29,15 @@ router.get("/:id", (req, res, next) => {
     setNext(next);
 
     UsersControllerById(token, id, res);
+});
+
+router.put("", (req, res, next) => {
+
+    const newUser = req.body;
+    const token = req.header('token');
+    setNext(next);
+
+    ModifyUserController(token, newUser, res);
 });
 
 module.exports = router;

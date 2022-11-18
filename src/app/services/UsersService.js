@@ -38,3 +38,19 @@ exports.UsersServiceById = async (id, res) => {
 
   return response(`User ${id} doesn't exist`, res, 200, {});
 }
+
+exports.ModifyUsersService = async (newUser, res) => {
+
+  const user = await UsersBrainstorming.findOne({ id: newUser.id });
+  if (user.password !== newUser.password) return response(`Incorrect user password`, res, 200, {});
+
+  const userUpdated = await UsersBrainstorming.findOneAndUpdate({ _id: newUser._id }, newUser, { new: true });
+
+  if (userUpdated) {
+    console.log(userUpdated);
+    const userUpdatedNoPass = passwordRemove(userUpdated);
+    return response(`User ${newUser.id} updated`, res, 200, userUpdatedNoPass);
+  }
+
+  return response(`Couldn't update user`, res, 200, {});
+}
