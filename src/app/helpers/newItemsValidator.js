@@ -147,7 +147,7 @@ exports.isNewTaskValid = (newTask, res) => {
   if (dueDate && !isDateValid(dueDate)) return response('Task dueDate is invalid', res, 400);
 
   //Validate done
-  if (done && typeof done == "boolean") return response('Task done is invalid', res, 400);
+  if (done && done !== true && done !== false) return response('Task done is invalid', res, 400);
 
   return true;
 }
