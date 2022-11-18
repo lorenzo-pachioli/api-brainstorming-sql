@@ -49,5 +49,6 @@ exports.isArrayOfObjIdValid = (array) => {
 }
 
 exports.isDateValid = (date) => {
-  return date instanceof Date && !isNaN(date);
+  const toDate = new Date(date);
+  return toDate.getTime() === toDate.getTime();
 }
