@@ -22,7 +22,7 @@ exports.NewTasksService = async (newTask, res) => {
   return response(`Task created succesfully`, res, 200, task);
 }
 
-exports.TasksServiceById = async (id, res) => {
+exports.TaskByIdService = async (id, res) => {
 
   const taskById = await Tasks.findOne({ id: id });
   if (taskById) return response(`Task ${id}`, res, 200, taskById);
@@ -38,13 +38,10 @@ exports.TasksDeleteByIdService = async (id, res) => {
   return response(`Task ${id} doesn't exist`, res, 200, {});
 }
 
-exports.ModifyTasksServiceById = async (newTask, res) => {
+exports.ModifyTasksByIdService = async (newTask, res) => {
 
   const taskUpdated = await Tasks.findOneAndUpdate({ _id: newTask._id }, newTask, { new: true });
-  if (taskUpdated) return response(`Task ${newTask.id} updated`, res, 200, taskUpdated);
-
-  const taskExist = await Tasks.findById(newTask._id);
-  if (!taskExist) return response(`Task ${newTask._id} doesn't exist`, res, 200, {});
+  if (taskUpdated) return response(`Task ${newTask.id} updated`, res, 200, taskUpdated)
 
   return response(`Couldn't update task`, res, 200, {});
 }

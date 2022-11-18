@@ -2,9 +2,9 @@ const { isIdAndTokenValid, isTokenValid } = require('../../utils/isIdAndTokenVal
 const {
   AllTasksService,
   NewTasksService,
-  TasksServiceById,
+  TaskByIdService,
   TasksDeleteByIdService,
-  ModifyTasksServiceById
+  ModifyTasksByIdService
 } = require('../services/TasksService');
 const { isNewTaskValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
@@ -26,19 +26,19 @@ exports.NewTasksController = (token, newTask, res) => {
 
 exports.TasksControllerById = (token, id, res) => {
 
-  isIdAndTokenValid(id, token, res) && TasksServiceById(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
+  isIdAndTokenValid(id, token, res) && TaskByIdService(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
 }
 
-exports.TasksDeleteControllerById = (token, id, res) => {
+exports.TasksDeleteByIdController = (token, id, res) => {
 
   isIdAndTokenValid(id, token, res) && TasksDeleteByIdService(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
 }
 
-exports.ModifyTasksControllerById = (token, newTask, res) => {
+exports.ModifyTasksByIdController = (token, newTask, res) => {
 
   if (
     isIdAndTokenValid(newTask.id, token, res) &&
     isNewTaskValid(newTask, res)) {
-    ModifyTasksServiceById(newTask, res).catch(() => next(newError(`Couldn't update task`, 500)));
+    ModifyTasksByIdService(newTask, res).catch(() => next(newError(`Couldn't update task`, 500)));
   }
 }
