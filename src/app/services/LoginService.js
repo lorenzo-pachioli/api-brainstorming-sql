@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UsersBrainstorming = require('../models/UsersModel');
 const { logInResponse } = require('../../utils/response');
-const { passwordRemove } = require('../../utils/passwordRemover');
+const { remover } = require('../../utils/remover');
 
 exports.LoginService = async (user, res) => {
 
@@ -11,10 +11,10 @@ exports.LoginService = async (user, res) => {
     const jwtSecretKey = process.env.JWT_SECRET_KEY;
     const data = {
       time: Date(),
-      userId: userExist.id,
+      userId: userExist._id,
     };
     const token = jwt.sign(data, jwtSecretKey);
-    const userWithoutPass = passwordRemove(userExist);
+    const userWithoutPass = remover(userExist, 'password');
 
     return logInResponse(`Correct login user ${user.username}`, res, 200, token, userWithoutPass);
   }

@@ -3,7 +3,8 @@ const {
     AllStoriesController,
     NewStoriesController,
     StoriesControllerById,
-    StoriesControllerByIdAllTasks
+    StoriesControllerByIdAllTasks,
+    StoryDeleteByIdController
 } = require('../controllers/StoriesController');
 const router = express.Router();
 const { setNext } = require('../../utils/response');
@@ -41,6 +42,15 @@ router.get("/:id/tasks", (req, res, next) => {
     setNext(next);
 
     StoriesControllerByIdAllTasks(token, id, res);
+});
+
+router.delete("/:id", (req, res, next) => {
+
+    const id = req.params.id;
+    const token = req.header('token');
+    setNext(next);
+
+    StoryDeleteByIdController(token, id, res);
 });
 
 module.exports = router;

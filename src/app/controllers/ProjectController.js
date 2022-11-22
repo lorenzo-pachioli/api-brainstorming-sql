@@ -4,7 +4,8 @@ const {
   AllProjectService,
   NewProjectService,
   ProjectServiceById,
-  ProjectServiceByIdAllEpics
+  ProjectServiceByIdAllEpics,
+  ProjectDeleteByIdService
 } = require('../services/ProjectsService');
 const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
@@ -18,7 +19,8 @@ exports.NewProjectController = (token, newProject, res) => {
 
 exports.AllProjectController = (token, res) => {
 
-  isTokenValid(token, res) && AllProjectService(res).catch(() => next(newError(`Couldn't get project list`, 500)));
+  const userId = isTokenValid(token, res);
+  userId && AllProjectService(userId, res).catch(() => next(newError(`Couldn't get project list`, 500)));
 }
 
 exports.ProjectControllerById = (token, id, res) => {
@@ -29,4 +31,9 @@ exports.ProjectControllerById = (token, id, res) => {
 exports.ProjectControllerByIdAllEpics = (token, id, res) => {
 
   isIdAndTokenValid(id, token, res) && ProjectServiceByIdAllEpics(id, res).catch(() => next(newError(`Couldn't get epic list for project ${id}`, 500)));
+}
+
+exports.ProjectDeleteByIdController = (token, id, res) => {
+
+  isIdAndTokenValid(id, token, res) && ProjectDeleteByIdService(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
 }

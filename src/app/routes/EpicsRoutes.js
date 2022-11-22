@@ -3,7 +3,8 @@ const {
     AllEpicsController,
     NewEpicsController,
     EpicsControllerById,
-    EpicsControllerByIdAllStories
+    EpicsControllerByIdAllStories,
+    EpicDeleteByIdController
 } = require('../controllers/EpicsController');
 const router = express.Router();
 const { setNext } = require('../../utils/response');
@@ -41,6 +42,15 @@ router.get("/:id/stories", (req, res, next) => {
     setNext(next);
 
     EpicsControllerByIdAllStories(token, id, res);
+});
+
+router.delete("/:id", (req, res, next) => {
+
+    const id = req.params.id;
+    const token = req.header('token');
+    setNext(next);
+
+    EpicDeleteByIdController(token, id, res);
 });
 
 module.exports = router;

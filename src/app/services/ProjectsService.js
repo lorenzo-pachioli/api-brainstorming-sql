@@ -5,20 +5,20 @@ const { response } = require('../../utils/response');
 
 exports.NewProjectService = async (newProject, res) => {
 
-  const projectAlreadyExist = await Projects.findOne({ name: newProject.name });
+  const projectAlreadyExist = await Projects.findOne({ name: newProject.name, members: [newProject.members] });
   if (projectAlreadyExist) return response(`Project with name '${newProject.name}' already exist`, res, 200, {});
 
-  const projectsList = await Projects.find();
-  const newMaxId = projectsList.length + 1;
+  const projectsList = await Projects.findOne().sort({ _id: -1 }).limit(1);
+  const newMaxId = projectsList ? projectsList.id + 1 : 1;
   const project = createProjects(newMaxId, newProject);
   project.save();
 
-  return response(`Project created succesfully`, res, res, 200, project);
+  return response(`Project created succesfully`, res, 200, project);
 }
 
-exports.AllProjectService = async (res) => {
+exports.AllProjectService = async (id, res) => {
 
-  const projectsList = await Projects.find();
+  const projectsList = await Projects.find({ userId: id });
 
   return response(`Project list`, res, 200, projectsList);
 }
@@ -40,4 +40,12 @@ exports.ProjectServiceByIdAllEpics = async (id, res) => {
   if (epicsList.length > 0) return response(`Epics for project ${id}`, res, 200, epicsList);
 
   return response(`There're no epics for project ${id}`, res, 200);
+}
+
+exports.ProjectDeleteByIdService = async (id, res) => {
+
+  const projectById = await Projects.deleteOne({ id: id });
+  if (projectById.deletedCount > 0) return response(`Project ${id}`, res, 200, {});
+
+  return response(`Project ${id} doesn't exist`, res, 200, {});
 }

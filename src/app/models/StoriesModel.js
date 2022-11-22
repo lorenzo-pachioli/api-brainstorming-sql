@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Users = require('./UsersModel');
 const Epics = require('./EpicsModel');
+const UsersBrainstorming = require('./UsersModel');
 
 const storiesSchema = new Schema({
   id: {

@@ -8,18 +8,17 @@ exports.NewStoriesService = async (newStory, res) => {
   const storyAlreadyExist = await Stories.findOne({ name: newStory.name });
   if (storyAlreadyExist) return response(`Story with name '${newStory.name}' already exist`, res, 200, {});
 
-  const epicsList = await Stories.find();
-  const newMaxId = epicsList.length + 1;
+  const lastStory = await Stories.findOne().sort({ _id: -1 }).limit(1);
+  const newMaxId = lastStory ? lastStory.id + 1 : 1;
   const story = createStories(newMaxId, newStory);
   story.save();
 
   return response(`Story created succesfully`, res, 200, story);
 }
 
-exports.AllStoriesService = async (res) => {
+exports.AllStoriesService = async (id, res) => {
 
-  const storiesList = await Stories.find();
-
+  const storiesList = await Stories.find({ assignedTo: [id] });
   return response(`Stories list`, res, 200, storiesList);
 }
 
@@ -40,4 +39,12 @@ exports.StoriesServiceByIdAllTasks = async (id, res) => {
   if (taskList.length > 0) return response(`There're no tasks for story ${id}`, res, 200, taskList);
 
   return response(`Tasks for story ${id}`, res, 200);
+}
+
+exports.StoryDeleteByIdService = async (id, res) => {
+
+  const storyById = await Stories.deleteOne({ id: id });
+  if (storyById.deletedCount > 0) return response(`Story ${id}`, res, 200, {});
+
+  return response(`Story ${id} doesn't exist`, res, 200, {});
 }

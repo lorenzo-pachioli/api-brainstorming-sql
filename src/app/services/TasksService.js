@@ -1,10 +1,13 @@
 const Tasks = require("../models/TasksModel");
 const { createTask } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
+const Stories = require("../models/StoriesModel");
 
-exports.AllTasksService = async (res) => {
+exports.AllTasksService = async (id, res) => {
 
-  const tasksList = await Tasks.find();
+  const storiesList = await Stories.find({ assignedTo: [id] });
+  const ids = storiesList.map(s => `${s._id}`);
+  const tasksList = await Tasks.find({ story: { $in: ids } });
 
   return response(`Tasks list`, res, 200, tasksList);
 }
@@ -14,8 +17,8 @@ exports.NewTasksService = async (newTask, res) => {
   const taskAlreadyExist = await Tasks.findOne({ name: newTask.name });
   if (taskAlreadyExist) return response(`Task with name '${newTask.name}' already exist`, res, 200, {});
 
-  const tasksList = await Tasks.find();
-  const newMaxId = tasksList.length + 1;
+  const lastTask = await Tasks.findOne().sort({ _id: -1 }).limit(1);
+  const newMaxId = lastTask ? lastTask.id + 1 : 1;
   const task = createTask(newMaxId, newTask);
   task.save();
 
@@ -32,8 +35,8 @@ exports.TaskByIdService = async (id, res) => {
 
 exports.TasksDeleteByIdService = async (id, res) => {
 
-  const taskById = await Tasks.remove({ id: id });
-  if (taskById) return response(`Task ${id}`, res, 200, taskById);
+  const taskById = await Tasks.deleteOne({ id: id });
+  if (taskById.deletedCount > 0) return response(`Task ${id}`, res, 200, taskById);
 
   return response(`Task ${id} doesn't exist`, res, 200, {});
 }

@@ -12,5 +12,8 @@ exports.LoginController = (body, res) => {
     password: body.password
   }
 
-  LoginService(user, res).catch(() => next(newError(`Couldn't login`, 500)));
+  LoginService(user, res).catch((err) => {
+    console.log(err);
+    next(newError(`Couldn't login${err}`, 500))
+  });
 }
