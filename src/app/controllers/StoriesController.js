@@ -13,7 +13,7 @@ const { newError } = require('../../utils/errorModeling');
 exports.NewStoriesController = (token, newStory, res) => {
 
   if (isTokenValid(token, res) && isNewStoryValid(newStory, res)) {
-    NewStoriesService(newStory, userId, res).catch(() => next(newError(`Couldn't save story`, 500)));
+    NewStoriesService(newStory, res).catch(() => next(newError(`Couldn't save story`, 500)));
   }
 }
 

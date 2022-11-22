@@ -20,7 +20,7 @@ exports.NewTasksController = (token, newTask, res) => {
   if (
     isTokenValid(token, res) &&
     isNewTaskValid(newTask, res)) {
-    NewTasksService(newTask, userId, res).catch(() => next(newError(`Couldn't save task`, 500)));
+    NewTasksService(newTask, res).catch(() => next(newError(`Couldn't save task`, 500)));
   }
 }
 
