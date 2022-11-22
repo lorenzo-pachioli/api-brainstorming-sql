@@ -5,7 +5,7 @@ const Stories = require("../models/StoriesModel");
 
 exports.AllTasksService = async (userId, res) => {
 
-  const storiesList = await Stories.find({ assignedTo: [userId] });
+  const storiesList = await Stories.find({ assignedTo: { $in: [userId] } });
   const ids = storiesList.map(s => `${s._id}`);
   const tasksList = await Tasks.find({ story: { $in: ids } });
 
