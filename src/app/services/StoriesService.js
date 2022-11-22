@@ -5,9 +5,6 @@ const { response } = require('../../utils/response');
 
 exports.NewStoriesService = async (newStory, res) => {
 
-  const storyAlreadyExist = await Stories.findOne({ name: newStory.name });
-  if (storyAlreadyExist) return response(`Story with name '${newStory.name}' already exist`, res, 200, {});
-
   const lastStory = await Stories.findOne().sort({ _id: -1 }).limit(1);
   const newMaxId = lastStory ? lastStory.id + 1 : 1;
   const story = createStories(newMaxId, newStory);
