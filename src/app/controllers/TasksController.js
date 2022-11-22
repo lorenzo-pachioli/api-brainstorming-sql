@@ -11,15 +11,14 @@ const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
 exports.AllTasksController = (token, res) => {
-
-  isTokenValid(token, res) && AllTasksService(userId, res).catch(() => next(newError(`Couldn't get tasks list`, 500)));
+  const userId = isTokenValid(token, res);
+  userId && AllTasksService(userId, res).catch(() => next(newError(`Couldn't get tasks list`, 500)));
 }
 
 exports.NewTasksController = (token, newTask, res) => {
 
-  const userId = isTokenValid(token, res);
   if (
-    userId &&
+    isTokenValid(token, res) &&
     isNewTaskValid(newTask, res)) {
     NewTasksService(newTask, userId, res).catch(() => next(newError(`Couldn't save task`, 500)));
   }
