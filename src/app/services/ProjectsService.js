@@ -16,9 +16,9 @@ exports.NewProjectService = async (newProject, res) => {
   return response(`Project created succesfully`, res, 200, project);
 }
 
-exports.AllProjectService = async (id, res) => {
+exports.AllProjectService = async (userId, res) => {
 
-  const projectsList = await Projects.find({ userId: id });
+  const projectsList = await Projects.find({ userId: userId });
 
   return response(`Project list`, res, 200, projectsList);
 }

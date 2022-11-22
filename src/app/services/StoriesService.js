@@ -16,9 +16,9 @@ exports.NewStoriesService = async (newStory, res) => {
   return response(`Story created succesfully`, res, 200, story);
 }
 
-exports.AllStoriesService = async (id, res) => {
+exports.AllStoriesService = async (userId, res) => {
 
-  const storiesList = await Stories.find({ assignedTo: [id] });
+  const storiesList = await Stories.find({ assignedTo: [userId] });
   return response(`Stories list`, res, 200, storiesList);
 }
 
