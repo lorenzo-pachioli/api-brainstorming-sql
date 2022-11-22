@@ -15,7 +15,7 @@ exports.NewStoriesService = async (newStory, res) => {
 
 exports.AllStoriesService = async (userId, res) => {
 
-  const storiesList = await Stories.find({ assignedTo: [userId] });
+  const storiesList = await Stories.find({ assignedTo: { $in: [userId] } });
   return response(`Stories list`, res, 200, storiesList);
 }
 

@@ -15,7 +15,7 @@ exports.NewProjectService = async (newProject, res) => {
 
 exports.AllProjectService = async (userId, res) => {
 
-  const projectsList = await Projects.find({ members: [userId] });
+  const projectsList = await Projects.find({ members: { $in: [userId] } });
 
   return response(`Project list`, res, 200, projectsList);
 }
