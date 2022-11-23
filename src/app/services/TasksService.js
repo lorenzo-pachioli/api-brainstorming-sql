@@ -2,12 +2,18 @@ const Tasks = require("../models/TasksModel");
 const { createTask } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 const Stories = require("../models/StoriesModel");
+const Projects = require("../models/ProjectsModel");
+const Epics = require("../models/EpicsModel");
 
 exports.AllTasksService = async (userId, res) => {
 
-  const storiesList = await Stories.find({ assignedTo: { $in: [userId] } });
-  const ids = storiesList.map(s => `${s._id}`);
-  const tasksList = await Tasks.find({ story: { $in: ids } });
+  const projects = await Projects.find({ members: { $in: [userId] } });
+  const ids = projects.map(p => `${p._id}`);
+  const epicList = await Epics.find({ project: { $in: ids } });
+  const epicsIds = epicList.map(e => `${e._id}`);
+  const storiesList = await Stories.find({ epic: { $in: epicsIds } });
+  const storiesIds = storiesList.map(e => `${e._id}`);
+  const tasksList = await Tasks.find({ story: { $in: storiesIds } });
 
   return response(`Tasks list`, res, 200, tasksList);
 }

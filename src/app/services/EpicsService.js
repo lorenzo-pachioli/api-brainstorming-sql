@@ -19,7 +19,7 @@ exports.NewEpicsService = async (newEpic, res) => {
 
 exports.AllEpicsService = async (userId, res) => {
 
-  const projects = await Projects.find({ members: [userId] });
+  const projects = await Projects.find({ members: { $in: [userId] } });
   const ids = projects.map(p => `${p._id}`);
   const epicList = await Epics.find({ project: { $in: ids } });
 
