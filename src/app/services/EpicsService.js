@@ -47,8 +47,9 @@ exports.EpicsServiceByIdAllStories = async (id, res) => {
 
 exports.EpicDeleteByIdService = async (id, res) => {
 
+  const epic = await Epics.findOne({ id: id });
   const epicById = await Epics.deleteOne({ id: id });
-  if (epicById.deletedCount > 0) return response(`Epic ${id}`, res, 200, {});
+  if (epicById.deletedCount > 0) return response(`Epic ${id}`, res, 200, epic);
 
   return response(`Epic ${id} doesn't exist`, res, 200, {});
 }

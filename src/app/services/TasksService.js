@@ -32,8 +32,9 @@ exports.TaskByIdService = async (id, res) => {
 
 exports.TasksDeleteByIdService = async (id, res) => {
 
+  const task = await Tasks.findOne({ id: id });
   const taskById = await Tasks.deleteOne({ id: id });
-  if (taskById.deletedCount > 0) return response(`Task ${id}`, res, 200, taskById);
+  if (taskById.deletedCount > 0) return response(`Task ${id}`, res, 200, task);
 
   return response(`Task ${id} doesn't exist`, res, 200, {});
 }

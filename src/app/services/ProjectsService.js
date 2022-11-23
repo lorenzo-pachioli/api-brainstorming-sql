@@ -41,8 +41,9 @@ exports.ProjectServiceByIdAllEpics = async (id, res) => {
 
 exports.ProjectDeleteByIdService = async (id, res) => {
 
+  const project = await Projects.findOne({ id: id });
   const projectById = await Projects.deleteOne({ id: id });
-  if (projectById.deletedCount > 0) return response(`Project ${id}`, res, 200, {});
+  if (projectById.deletedCount > 0) return response(`Project ${id}`, res, 200, project);
 
   return response(`Project ${id} doesn't exist`, res, 200, {});
 }

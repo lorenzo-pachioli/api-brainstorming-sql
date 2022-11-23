@@ -39,9 +39,10 @@ exports.StoriesServiceByIdAllTasks = async (id, res) => {
 }
 
 exports.StoryDeleteByIdService = async (id, res) => {
-
+  const story = await Stories.findOne({ id: id });
+  const task = await Tasks.deleteMany({ story: `${story._id}` });
   const storyById = await Stories.deleteOne({ id: id });
-  if (storyById.deletedCount > 0) return response(`Story ${id}`, res, 200, {});
+  if (storyById.deletedCount > 0) return response(`Story ${id}`, res, 200, story);
 
   return response(`Story ${id} doesn't exist`, res, 200, {});
 }
