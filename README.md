@@ -29,6 +29,7 @@
 | /users                      |	PUT           |	Permite modificar un user	                  |
 | /users                      |	GET           |	Recupera un listado de Users	              |
 | /users/:_id                 |	GET           |	Recupera un User (_id es un OID)	          |
+| /users/:_id                 |	DELETE        |	Borra un User (_id es un OID)	              |
 
 ___
 
