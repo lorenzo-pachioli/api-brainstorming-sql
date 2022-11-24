@@ -3,7 +3,8 @@ const {
   NewUsersService,
   AllUsersService,
   UsersServiceById,
-  ModifyUsersService
+  ModifyUsersService,
+  UserDeleteByIdService
 } = require('../services/UsersService');
 const { isNewUserValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
@@ -31,4 +32,9 @@ exports.ModifyUserController = (token, newUser, res) => {
   if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
     ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
   }
+}
+
+exports.UserDeleteByIdController = (token, id, res) => {
+
+  isIdAndTokenValid(id, token, res) && UserDeleteByIdService(id, res).catch(() => next(newError(`Couldn't delete user`, 500)));
 }

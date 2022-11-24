@@ -53,3 +53,12 @@ exports.ModifyUsersService = async (newUser, res) => {
 
   return response(`Couldn't update user`, res, 200, {});
 }
+
+exports.UserDeleteByIdService = async (id, res) => {
+
+  const user = await UsersBrainstorming.findOne({ id: id });
+  const userById = await UsersBrainstorming.deleteOne({ id: id });
+  if (userById.deletedCount > 0) return response(`user ${id}`, res, 200, user);
+
+  return response(`user ${id} doesn't exist`, res, 200, {});
+}

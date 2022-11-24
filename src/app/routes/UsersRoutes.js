@@ -3,7 +3,8 @@ const {
     AllUsersController,
     NewUsersController,
     UsersControllerById,
-    ModifyUserController
+    ModifyUserController,
+    UserDeleteByIdController
 } = require('../controllers/UsersController');
 const router = express.Router();
 const { setNext } = require('../../utils/response');
@@ -38,6 +39,15 @@ router.put("", (req, res, next) => {
     setNext(next);
 
     ModifyUserController(token, newUser, res);
+});
+
+router.delete("/:id", (req, res, next) => {
+
+    const id = req.params.id;
+    const token = req.header('token');
+    setNext(next);
+
+    UserDeleteByIdController(token, id, res);
 });
 
 module.exports = router;

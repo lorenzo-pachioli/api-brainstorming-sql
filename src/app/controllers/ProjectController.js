@@ -35,5 +35,5 @@ exports.ProjectControllerByIdAllEpics = (token, id, res) => {
 
 exports.ProjectDeleteByIdController = (token, id, res) => {
 
-  isIdAndTokenValid(id, token, res) && ProjectDeleteByIdService(id, res).catch(() => next(newError(`Couldn't get task`, 500)));
+  isIdAndTokenValid(id, token, res) && ProjectDeleteByIdService(id, res).catch(() => next(newError(`Couldn't delete project`, 500)));
 }
