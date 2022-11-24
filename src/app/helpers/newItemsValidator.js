@@ -9,7 +9,7 @@ const { response } = require('../../utils/response');
 
 exports.isNewUserValid = (newUser, res) => {
 
-  const { email, password, username } = newUser;
+  const { email, password, username, name } = newUser;
   const regExEmail = /^[-\w.%+]{1,30}@(?:[A-Z0-9-]{4,30}\.)[A-Z]{2,20}$/i;
   const onlyNumbers = /^(.*\d){6,15}$/;
 
@@ -24,6 +24,12 @@ exports.isNewUserValid = (newUser, res) => {
 
   //Validate username
   if (username.length < 4) return response('Incorrect username', res, 400);
+
+  //Validate name.first
+  if (name.first.length < 4) return response('Incorrect name first', res, 400);
+
+  //Validate name.last
+  if (name.last.length < 4) return response('Incorrect name last', res, 400);
 
   return true;
 }

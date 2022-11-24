@@ -21,13 +21,14 @@ exports.createEpics = (id, newEpic) => {
 
 exports.createUsers = (id, newUser) => {
 
-  const { email, username, password } = newUser;
+  const { email, username, password, name } = newUser;
 
   const user = UsersBrainstorming({
     id,
     email,
     username,
-    password
+    password,
+    name
   });
 
   return user;
