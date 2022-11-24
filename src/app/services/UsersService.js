@@ -27,16 +27,16 @@ exports.AllUsersService = async (res) => {
   return response(`User list is empty`, res, 200);
 }
 
-exports.UsersServiceById = async (id, res) => {
+exports.UsersServiceById = async (_id, res) => {
 
-  const user = await UsersBrainstorming.findOne({ id: id });
+  const user = await UsersBrainstorming.findOne({ _id });
 
   if (user) {
     const userWithoutPassword = remover(user, 'password');
-    return response(`User ${id}`, res, 200, userWithoutPassword);
+    return response(`User ${_id}`, res, 200, userWithoutPassword);
   }
 
-  return response(`User ${id} doesn't exist`, res, 200, {});
+  return response(`User ${_id} doesn't exist`, res, 200, {});
 }
 
 exports.ModifyUsersService = async (newUser, res) => {
@@ -54,11 +54,11 @@ exports.ModifyUsersService = async (newUser, res) => {
   return response(`Couldn't update user`, res, 200, {});
 }
 
-exports.UserDeleteByIdService = async (id, res) => {
+exports.UserDeleteByIdService = async (_id, res) => {
 
-  const user = await UsersBrainstorming.findOne({ id: id });
-  const userById = await UsersBrainstorming.deleteOne({ id: id });
-  if (userById.deletedCount > 0) return response(`user ${id}`, res, 200, user);
+  const user = await UsersBrainstorming.findOne({ _id });
+  const userById = await UsersBrainstorming.deleteOne({ _id });
+  if (userById.deletedCount > 0) return response(`user ${_id}`, res, 200, user);
 
-  return response(`user ${id} doesn't exist`, res, 200, {});
+  return response(`user ${_id} doesn't exist`, res, 200, {});
 }

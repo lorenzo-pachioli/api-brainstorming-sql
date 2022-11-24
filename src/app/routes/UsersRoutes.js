@@ -24,11 +24,11 @@ router.get("", (req, res, next) => {
 });
 
 router.get("/:id", (req, res, next) => {
-    const id = req.params.id;
+    const _id = req.params.id;
     const token = req.header('token');
     setNext(next);
 
-    UsersControllerById(token, id, res);
+    UsersControllerById(token, _id, res);
 });
 
 router.put("", (req, res, next) => {
@@ -42,11 +42,11 @@ router.put("", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
 
-    const id = req.params.id;
+    const _id = req.params.id;
     const token = req.header('token');
     setNext(next);
 
-    UserDeleteByIdController(token, id, res);
+    UserDeleteByIdController(token, _id, res);
 });
 
 module.exports = router;
