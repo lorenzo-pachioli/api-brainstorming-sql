@@ -11,10 +11,9 @@ const { setNext } = require('../../utils/response');
 
 router.post("", (req, res, next) => {
     const newUser = req.body;
-    const token = req.header('token');
     setNext(next);
 
-    NewUsersController(token, newUser, res);
+    NewUsersController(newUser, res);
 });
 
 router.get("", (req, res, next) => {

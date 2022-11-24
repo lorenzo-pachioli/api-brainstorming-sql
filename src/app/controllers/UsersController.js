@@ -10,9 +10,9 @@ const { isNewUserValid } = require('../helpers/newItemsValidator');
 const { next } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
-exports.NewUsersController = (token, newUser, res) => {
+exports.NewUsersController = (newUser, res) => {
 
-  if (isTokenValid(token, res) && isNewUserValid(newUser, res)) {
+  if (NewUserValid(newUser, res)) {
     NewUsersService(newUser, res).catch(() => next(newError(`Couldn't create new user`, 500)));
   }
 }
