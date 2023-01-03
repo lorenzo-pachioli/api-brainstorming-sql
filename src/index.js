@@ -1,4 +1,4 @@
-require('./config/mongoDB');
+require('./config/dbConnection');
 
 const express = require('express');
 const app = express();

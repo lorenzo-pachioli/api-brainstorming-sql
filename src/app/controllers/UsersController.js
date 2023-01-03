@@ -13,9 +13,10 @@ const { isObjectIdValid } = require('../../utils/inputsValidator');
 
 exports.NewUsersController = (newUser, res) => {
 
-  if (isNewUserValid(newUser, res)) {
+  /* if (isNewUserValid(newUser, res)) {
     NewUsersService(newUser, res).catch(() => next(newError(`Couldn't create new user`, 500)));
-  }
+  } */
+  NewUsersService(newUser, res)
 }
 
 exports.AllUsersController = (token, res) => {

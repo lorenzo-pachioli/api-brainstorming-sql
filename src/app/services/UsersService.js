@@ -2,18 +2,20 @@ const UsersBrainstorming = require('../models/UsersModel');
 const { createUsers } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 const { remover } = require('../../utils/remover');
+const User = require('../middlewares/UserMiddlewares');
+const user = new User;
 
-exports.NewUsersService = async (newUser, res) => {
+exports.NewUsersService = (newUser, res) => {
 
-  const userAlreadyExist = await UsersBrainstorming.findOne({ username: newUser.username });
-  if (userAlreadyExist) return response(`Username '${newUser.username}' already exist`, res, 200, {});
+  user.findOne({ email: newUser.email }, (err, result) => {
+    if (err) return response(`User created failed`, res, 200, err);
+    if (result.length > 0) return response(`Email '${newUser.email}' already exist`, res, 200, {});
 
-  const userList = await UsersBrainstorming.findOne().sort({ _id: -1 }).limit(1);
-  const newMaxId = userList.id + 1;
-  const user = createUsers(newMaxId, newUser);
-  user.save();
-
-  return response(`User created succesfully`, res, 200, user);
+    user.save(newUser, (err, result) => {
+      if (err) return response(`User created failed`, res, 200, err);
+      return response(`User created succesfully`, res, 200, result);
+    });
+  });
 }
 
 exports.AllUsersService = async (res) => {
