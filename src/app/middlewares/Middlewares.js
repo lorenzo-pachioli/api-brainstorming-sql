@@ -1,47 +1,81 @@
 const { queryForSelect, valuesArray, queryForUpdate, queryForCreate } = require('../../utils/middlewareHandlres');
-const { db } = require('../../config/dbConnection');
+const { db, query } = require('../../config/dbConnection');
 
 class Middlewares {
 
-  getById(table, id, callback) {
-    db.query(`select * from ${table} where id = ?;`, [id], (err, result) => callback(err, result));
+  async getAll(table, callback = (err, result) => { }) {
+    try {
+      const data = await query(`select * from ${table};`);
+
+      callback(null, data);
+      return data;
+    } catch (error) {
+      return callback(error, null);
+    }
   }
 
-  getOne(table, userInfo, callback) {
+  async getById(table, id, callback = (err, result) => { }) {
+    try {
+      const data = await query(`select * from ${table} where id = ?;`, [id]);
 
-    const newQuery = queryForSelect(userInfo);
-    const newValues = valuesArray(userInfo);
-
-    db.query(`select * from ${table} where ${newQuery};`, newValues, (err, result) => callback(err, result));
+      callback(null, data);
+      return data;
+    } catch (error) {
+      return callback(error, null);
+    }
   }
 
-  getOneAndUpdate(table, filter, update) {
+  async getOne(table, userInfo, callback = (err, result) => { }) {
+    try {
+      const newQuery = queryForSelect(userInfo);
+      const newValues = valuesArray(userInfo);
+      const data = await query(`select * from ${table} where ${newQuery};`, newValues);
 
-    const setQuery = queryForUpdate(update);
-    const whereQuery = queryForUpdate(filter);
-    const setValues = valuesArray(update);
-    const whereValues = valuesArray(filter);
-    const completeValues = setValues.concat(whereValues);
-
-    db.query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues, (err, result) => {
-      return callback(err, result);
-    });
+      callback(null, data);
+      return data;
+    } catch (err) {
+      return callback(error, null);
+    }
   }
 
-  newItem(table, item, callback) {
-    const newQuery = queryForCreate(item);
-    const values = valuesArray(item);
+  async getOneAndUpdate(table, filter, update, callback = (err, result) => { }) {
+    try {
+      const setQuery = queryForUpdate(update);
+      const whereQuery = queryForUpdate(filter);
+      const setValues = valuesArray(update);
+      const whereValues = valuesArray(filter);
+      const completeValues = setValues.concat(whereValues);
+      const data = await query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues);
 
-    db.query(`insert into ${table}(${newQuery}) values (?)`, [values], (err, result) => {
-      return callback(err, result)
-    });
+      callback(null, data);
+      return data;
+    } catch (err) {
+      return callback(error, null);
+    }
   }
 
-  deleteItem(table, id, callback) {
+  async newItem(table, item, callback = (err, result) => { }) {
+    try {
+      const newQuery = queryForCreate(item);
+      const values = valuesArray(item);
+      const data = await query(`insert into ${table}(${newQuery}) values (?)`, [values]);
 
-    db.query(`delete from ${table} where id = ?;`, [id], (err, result) => {
-      return callback(err, result);
-    });
+      callback(null, data);
+      return data;
+    } catch (error) {
+      return callback(error, null);
+    }
+  }
+
+  async deleteItem(table, id, callback = (err, result) => { }) {
+    try {
+      const data = await query(`delete from ${table} where id = ?;`, [id]);
+
+      callback(null, data);
+      return data;
+    } catch (error) {
+      return callback(error, null);
+    }
   }
 }
 

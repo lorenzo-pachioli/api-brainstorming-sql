@@ -1,28 +1,40 @@
 const Middlewares = require('./Middlewares');
 
-class User extends Middlewares {
+const middleware = new Middlewares;
+
+class User {
 
   table = 'user';
 
-  findById(id, callback) {
-    this.getById(this.table, id, callback);
+  async findAll(callback) {
+    const result = await middleware.getAll(this.table, callback);
+    return result;
   }
 
-  findOne(userInfo, callback) {
-    this.getOne(this.table, userInfo, callback);
+  async findById(id, callback) {
+    const result = await middleware.getById(this.table, id, callback);
+    return result;
   }
 
-  findOneAndUpdate(filter, update) {
-    this.getOneAndUpdate(this.table, filter, update);
+  async findOne(userInfo, callback) {
+    const result = await middleware.getOne(this.table, userInfo, callback);
+    return result;
   }
 
-  save(item, callback) {
-    this.newItem(this.table, item, () => { });
-    this.getOne(this.table, item, callback);
+  async findOneAndUpdate(filter, update) {
+    const result = await middleware.getOneAndUpdate(this.table, filter, update);
+    return result;
   }
 
-  deleteOne(id, callback) {
-    this.deleteItem(this.table, id, callback);
+  async save(item, callback) {
+    await middleware.newItem(this.table, item, () => { });
+    const result = await middleware.getOne(this.table, item, callback);
+    return result;
+  }
+
+  async deleteOne(id, callback) {
+    const result = await middleware.deleteItem(this.table, id, callback);
+    return result;
   }
 }
 

@@ -21,16 +21,18 @@ exports.NewUsersController = (newUser, res) => {
 
 exports.AllUsersController = (token, res) => {
 
-  isTokenValid(token, res) && AllUsersService(res).catch(() => next(newError(`Couldn't get users list`, 500)));
+  /* isTokenValid(token, res) && */ AllUsersService(res).catch(() => next(newError(`Couldn't get users list`, 500)));
 }
 
 exports.UsersControllerById = (token, _id, res) => {
 
-  if (isTokenValid(token, res) && isObjectIdValid(_id)) {
+  /* if (isTokenValid(token, res) && isObjectIdValid(_id)) {
     UsersServiceById(_id, res).catch(() => next(newError(`Couldn't get user ${_id}`, 500)));
   } else {
     next(newError(`_id: ${_id} is not valid`, 500));
-  }
+  } */
+
+  UsersServiceById(_id, res).catch(() => next(newError(`Couldn't get user ${_id}`, 500)));
 }
 
 exports.ModifyUserController = (token, newUser, res) => {

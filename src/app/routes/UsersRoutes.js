@@ -25,7 +25,7 @@ router.get("", (req, res, next) => {
 
 router.get("/:id", (req, res, next) => {
     const _id = req.params.id;
-    const token = req.header('token');
+    const token = /* req.header('token') */ 'x';
     setNext(next);
 
     UsersControllerById(token, _id, res);

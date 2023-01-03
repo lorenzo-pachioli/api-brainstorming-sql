@@ -5,22 +5,20 @@ const { remover } = require('../../utils/remover');
 const User = require('../middlewares/UserMiddlewares');
 const user = new User;
 
-exports.NewUsersService = (newUser, res) => {
+exports.NewUsersService = async (newUser, res) => {
 
-  user.findOne({ email: newUser.email }, (err, result) => {
+  const result = await user.findOne({ email: newUser.email });
+  if (result.length > 0) return response(`Email '${newUser.email}' already exist`, res, 200, {});
+
+  user.save(newUser, (err, result) => {
     if (err) return response(`User created failed`, res, 200, err);
-    if (result.length > 0) return response(`Email '${newUser.email}' already exist`, res, 200, {});
-
-    user.save(newUser, (err, result) => {
-      if (err) return response(`User created failed`, res, 200, err);
-      return response(`User created succesfully`, res, 200, result);
-    });
+    return response(`User created succesfully`, res, 200, result);
   });
 }
 
 exports.AllUsersService = async (res) => {
 
-  const userList = await UsersBrainstorming.find();
+  const userList = await user.findAll();
   if (userList.length > 0) {
     const userListWithoutPass = remover(userList, 'password');
     return response(`User list`, res, 200, userListWithoutPass);
@@ -31,10 +29,10 @@ exports.AllUsersService = async (res) => {
 
 exports.UsersServiceById = async (_id, res) => {
 
-  const user = await UsersBrainstorming.findOne({ _id });
+  const alreadyExist = await user.findById(_id);
 
-  if (user) {
-    const userWithoutPassword = remover(user, 'password');
+  if (alreadyExist.length > 0) {
+    const userWithoutPassword = remover(alreadyExist[0], 'password');
     return response(`User ${_id}`, res, 200, userWithoutPassword);
   }
 
