@@ -1,5 +1,5 @@
 const { queryForSelect, valuesArray, queryForUpdate, queryForCreate } = require('../../utils/middlewareHandlres');
-const { db, query } = require('../../config/dbConnection');
+const { query } = require('../../config/dbConnection');
 
 class Middlewares {
 
@@ -34,7 +34,9 @@ class Middlewares {
       const setValues = valuesArray(update);
       const whereValues = valuesArray(filter);
       const completeValues = setValues.concat(whereValues);
-      const data = await query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues);
+
+      await query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues);
+      const data = await this.getOne(table, filter);
 
       callback(null, data);
       return data;

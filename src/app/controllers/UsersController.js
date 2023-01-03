@@ -41,7 +41,7 @@ exports.ModifyUserController = (token, newUser, res) => {
       ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
     } */
 
-  ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
+  ModifyUsersService(newUser, res);
 }
 
 exports.UserDeleteByIdController = (token, _id, res) => {
@@ -52,5 +52,5 @@ exports.UserDeleteByIdController = (token, _id, res) => {
       next(newError(`_id: ${_id} is not valid`, 500));
     } */
 
-  UserDeleteByIdService(_id, res).catch(() => next(newError(`Couldn't delete user ${_id}`, 500)));
+  UserDeleteByIdService(_id, res);
 }

@@ -21,8 +21,8 @@ class User {
     return result;
   }
 
-  async findOneAndUpdate(filter, update) {
-    const result = await middleware.getOneAndUpdate(this.table, filter, update);
+  async findOneAndUpdate(filter, update, callback) {
+    const result = await middleware.getOneAndUpdate(this.table, filter, update, callback);
     return result;
   }
 

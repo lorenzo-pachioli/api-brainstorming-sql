@@ -1,5 +1,3 @@
-const UsersBrainstorming = require('../models/UsersModel');
-const { createUsers } = require('../helpers/modelCreators');
 const { response } = require('../../utils/response');
 const { remover } = require('../../utils/remover');
 const User = require('../middlewares/UserMiddlewares');
@@ -39,22 +37,17 @@ exports.UsersServiceById = async (_id, res) => {
   return response(`User ${_id} doesn't exist`, res, 200, {});
 }
 
-exports.ModifyUsersService = async (newUser, res) => {
+exports.ModifyUsersService = (newUser, res) => {
 
-  const user = await UsersBrainstorming.findOne({ id: newUser.id });
-  if (user.password !== newUser.password) return response(`Incorrect user password`, res, 200, {});
-
-  const userUpdated = await UsersBrainstorming.findOneAndUpdate({ _id: newUser._id }, newUser, { new: true });
-
-  if (userUpdated) {
-    const userUpdatedNoPass = remover(userUpdated);
+  user.findOneAndUpdate({ id: newUser.id }, newUser, (err, result) => {
+    if (err) return response(`Modify user ${id} failed`, res, 200, {});
+    if (result.affectedRows === 0) return response(`User ${id} doesn't exist`, res, 200, {});
+    const userUpdatedNoPass = remover(result);
     return response(`User ${newUser.id} updated`, res, 200, userUpdatedNoPass);
-  }
-
-  return response(`Couldn't update user`, res, 200, {});
+  });
 }
 
-exports.UserDeleteByIdService = async (id, res) => {
+exports.UserDeleteByIdService = (id, res) => {
 
   user.deleteOne(id, (err, result) => {
     if (err) return response(`Delete user ${id} failed`, res, 200, {});
