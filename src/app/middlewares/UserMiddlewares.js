@@ -12,7 +12,7 @@ class User {
   }
 
   async findById(id, callback) {
-    const result = await middleware.getById(this.table, id, callback);
+    const result = await middleware.getOne(this.table, { id }, callback);
     return result;
   }
 

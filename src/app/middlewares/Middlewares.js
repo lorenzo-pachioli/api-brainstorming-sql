@@ -14,17 +14,6 @@ class Middlewares {
     }
   }
 
-  async getById(table, id, callback = (err, result) => { }) {
-    try {
-      const data = await query(`select * from ${table} where id = ?;`, [id]);
-
-      callback(null, data);
-      return data;
-    } catch (error) {
-      return callback(error, null);
-    }
-  }
-
   async getOne(table, userInfo, callback = (err, result) => { }) {
     try {
       const newQuery = queryForSelect(userInfo);
@@ -33,7 +22,7 @@ class Middlewares {
 
       callback(null, data);
       return data;
-    } catch (err) {
+    } catch (error) {
       return callback(error, null);
     }
   }

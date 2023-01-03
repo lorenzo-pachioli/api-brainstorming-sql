@@ -37,16 +37,20 @@ exports.UsersControllerById = (token, _id, res) => {
 
 exports.ModifyUserController = (token, newUser, res) => {
 
-  if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
-    ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
-  }
+  /*   if (isIdAndTokenValid(newUser.id, token, res) && isNewUserValid(newUser, res)) {
+      ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
+    } */
+
+  ModifyUsersService(newUser, res).catch(() => next(newError(`Couldn't update user`, 500)));
 }
 
 exports.UserDeleteByIdController = (token, _id, res) => {
 
-  if (isTokenValid(token, res) && isObjectIdValid(_id)) {
-    UserDeleteByIdService(_id, res).catch(() => next(newError(`Couldn't delete user ${_id}`, 500)));
-  } else {
-    next(newError(`_id: ${_id} is not valid`, 500));
-  }
+  /*   if (isTokenValid(token, res) && isObjectIdValid(_id)) {
+      UserDeleteByIdService(_id, res).catch(() => next(newError(`Couldn't delete user ${_id}`, 500)));
+    } else {
+      next(newError(`_id: ${_id} is not valid`, 500));
+    } */
+
+  UserDeleteByIdService(_id, res).catch(() => next(newError(`Couldn't delete user ${_id}`, 500)));
 }
