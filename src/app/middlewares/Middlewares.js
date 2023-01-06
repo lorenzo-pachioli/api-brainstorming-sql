@@ -3,7 +3,7 @@ const { query } = require('../../config/dbConnection');
 
 class Middlewares {
 
-  async getAll(table, callback = (err, result) => { }) {
+  async getAllTable(table, callback = (err, result) => { }) {
     try {
       const data = await query(`select * from ${table};`);
 
@@ -14,11 +14,23 @@ class Middlewares {
     }
   }
 
-  async getOne(table, userInfo, callback = (err, result) => { }) {
+  async getAllMatchs(table, userInfo, callback = (err, result) => { }) {
     try {
       const newQuery = queryForSelect(userInfo);
       const newValues = valuesArray(userInfo);
       const data = await query(`select * from ${table} where ${newQuery};`, newValues);
+
+      callback(null, data);
+      return data;
+    } catch (error) {
+      return callback(error, null);
+    }
+  }
+
+  async getInSet(table, filter, values, callback = (err, result) => { }) {
+    try {
+      const setValues = values.toString();
+      const data = await query(`select * from ${table} t where FIND_IN_SET(t.${filter}, '${setValues}');`);
 
       callback(null, data);
       return data;

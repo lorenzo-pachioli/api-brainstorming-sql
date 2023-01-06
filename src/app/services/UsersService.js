@@ -1,14 +1,14 @@
 const { response } = require('../../utils/response');
 const { remover } = require('../../utils/remover');
-const User = require('../middlewares/UserMiddlewares');
-const user = new User;
+const QueryFuctions = require('../middlewares/QueryFunctions');
+const User = new QueryFuctions('user');
 
 exports.NewUsersService = async (newUser, res) => {
 
-  const result = await user.findOne({ email: newUser.email });
+  const result = await User.find({ email: newUser.email });
   if (result.length > 0) return response(`Email '${newUser.email}' already exist`, res, 200, {});
 
-  user.save(newUser, (err, result) => {
+  User.save(newUser, (err, result) => {
     if (err) return response(`User created failed`, res, 200, err);
     return response(`User created succesfully`, res, 200, result);
   });
@@ -16,7 +16,7 @@ exports.NewUsersService = async (newUser, res) => {
 
 exports.AllUsersService = async (res) => {
 
-  const userList = await user.findAll();
+  const userList = await User.findAll();
   if (userList.length > 0) {
     const userListWithoutPass = remover(userList, 'password');
     return response(`User list`, res, 200, userListWithoutPass);
@@ -27,7 +27,7 @@ exports.AllUsersService = async (res) => {
 
 exports.UsersServiceById = async (_id, res) => {
 
-  const alreadyExist = await user.findById(_id);
+  const alreadyExist = await User.findById(_id);
 
   if (alreadyExist.length > 0) {
     const userWithoutPassword = remover(alreadyExist[0], 'password');
@@ -39,7 +39,7 @@ exports.UsersServiceById = async (_id, res) => {
 
 exports.ModifyUsersService = (newUser, res) => {
 
-  user.findOneAndUpdate({ id: newUser.id }, newUser, (err, result) => {
+  User.findOneAndUpdate({ id: newUser.id }, newUser, (err, result) => {
     if (err) return response(`Modify user ${id} failed`, res, 200, {});
     if (result.affectedRows === 0) return response(`User ${id} doesn't exist`, res, 200, {});
     const userUpdatedNoPass = remover(result);
@@ -49,7 +49,7 @@ exports.ModifyUsersService = (newUser, res) => {
 
 exports.UserDeleteByIdService = (id, res) => {
 
-  user.deleteOne(id, (err, result) => {
+  User.deleteOne(id, (err, result) => {
     if (err) return response(`Delete user ${id} failed`, res, 200, {});
     if (result.affectedRows === 0) return response(`User ${id} doesn't exist`, res, 200, {});
     return response(`User ${id} deleted succesfully`, res, 200, {});

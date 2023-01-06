@@ -2,22 +2,29 @@ const Middlewares = require('./Middlewares');
 
 const middleware = new Middlewares;
 
-class User {
+class QueryFuctions {
 
-  table = 'user';
+  constructor(table) {
+    this.table = table;
+  }
 
   async findAll(callback) {
-    const result = await middleware.getAll(this.table, callback);
+    const result = await middleware.getAllTable(this.table, callback);
     return result;
   }
 
   async findById(id, callback) {
-    const result = await middleware.getOne(this.table, { id }, callback);
+    const result = await middleware.getAllMatchs(this.table, { id }, callback);
     return result;
   }
 
-  async findOne(userInfo, callback) {
-    const result = await middleware.getOne(this.table, userInfo, callback);
+  async find(info, callback) {
+    const result = await middleware.getAllMatchs(this.table, info, callback);
+    return result;
+  }
+
+  async findInSet(filter, value, callback) {
+    const result = await middleware.getInSet(this.table, filter, value, callback);
     return result;
   }
 
@@ -28,7 +35,7 @@ class User {
 
   async save(item, callback) {
     await middleware.newItem(this.table, item, () => { });
-    const result = await middleware.getOne(this.table, item, callback);
+    const result = await middleware.getAllMatchs(this.table, item, callback);
     return result;
   }
 
@@ -38,4 +45,4 @@ class User {
   }
 }
 
-module.exports = User;
+module.exports = QueryFuctions;
