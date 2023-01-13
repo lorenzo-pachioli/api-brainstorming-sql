@@ -6,7 +6,7 @@ const {
   UserDeleteByIdService
 } = require('../services/UsersService');
 const { newError } = require('../../utils/errorModeling');
-const { response } = require('../../utils/response');
+const { response, serviceReturn } = require('../../utils/response');
 
 exports.NewUsersController = async (req, res, next) => {
   try {
@@ -30,7 +30,6 @@ exports.AllUsersController = async (req, res, next) => {
 exports.UsersControllerById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const userById = await UsersServiceById(id);
     return response(userById.msg, res, 200, userById.content);
   } catch (err) {
@@ -41,9 +40,9 @@ exports.UsersControllerById = async (req, res, next) => {
 exports.ModifyUserController = async (req, res, next) => {
   try {
     const newUser = req.body;
-    const userExist = await UsersServiceById(newUser.id);
+    const userExist = await UsersServiceById(newUser.id, true);
     if (!userExist.status) return response(userExist.msg, res, 200, {});
-    if (userExist.content.password !== newUser.password) return serviceReturn(`Incorrect user password`, {});
+    if (userExist.content.password !== newUser.password) return response(`Incorrect user password`, res, 200, {});
     const userModifyed = await ModifyUsersService(newUser);
     return response(userModifyed.msg, res, 200, userModifyed.content);
   } catch (err) {

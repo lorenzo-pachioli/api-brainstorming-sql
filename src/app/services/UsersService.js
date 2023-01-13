@@ -10,7 +10,7 @@ exports.NewUsersService = async (newUser) => {
 
   const saved = await User.save(newUser);
   if (saved) return serviceReturn(`User created succesfully`, saved, true);
-  return serviceReturn(`The user ${newStory.id} failed to save`, {}, false);
+  return serviceReturn(`The user ${newUser.id} failed to save`, {}, false);
 }
 
 exports.AllUsersService = async () => {

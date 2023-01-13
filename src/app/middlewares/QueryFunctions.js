@@ -1,6 +1,7 @@
 const Middlewares = require('./Middlewares');
-const Validator = require('schema-validator');
+/* const Validator = require('schema-validator'); */
 const { isIdInteger } = require('../../utils/inputsValidator');
+const Validator = require('../../utils/schemaValidator');
 const middleware = new Middlewares;
 
 class QueryFuctions {
@@ -17,9 +18,17 @@ class QueryFuctions {
 
   async createModel(model) {
     const valid = this.schemaValidator.check(model);
-    if (valid._error) throw new Error(`Invalid ${this.table} schema`);
-    return valid;
+    console.log('valid', valid.error);
+    if (valid.error) throw new Error(`Invalid ${this.table} schema`);
+    return model;
   }
+
+  /*   async validateCampus(model) {
+      const setQuery = queryForCreate(model);
+      const valid = this.schemaValidator.check(model);
+      console.log(setQuery, 'item', Object.keys(valid), Object.keys(valid).find(item => item === setQuery));
+      return valid;
+    } */
 
   async findAll(callback) {
     const result = await middleware.getAllTable(this.table, callback);
@@ -60,9 +69,9 @@ class QueryFuctions {
     return result;
   }
 
-  async deleteOne(id, callback) {
+  async deleteById(id, callback) {
 
-    if (isIdInteger(id)) throw new Error(`Invalid id type`);
+    if (isIdInteger({ id })) throw new Error(`Invalid id type`);
     const result = await middleware.deleteItem(this.table, id, callback);
     return result;
   }
