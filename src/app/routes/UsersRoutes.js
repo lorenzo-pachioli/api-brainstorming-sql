@@ -16,7 +16,7 @@ router.get("", isTokenValid, AllUsersController);
 
 router.get("/:id", isIdAndTokenValid, UsersControllerById);
 
-router.put("", isTokenValid, idValidation, objectIdValidation, ModifyUserController);
+router.put("", isTokenValid, idValidation, ModifyUserController);
 
 router.delete("/:id", isIdAndTokenValid, UserDeleteByIdController);
 

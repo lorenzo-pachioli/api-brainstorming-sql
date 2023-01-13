@@ -23,12 +23,16 @@ exports.AllUsersService = async () => {
   return serviceReturn(`User list is empty`, [], true);
 }
 
-exports.UsersServiceById = async (id) => {
+exports.UsersServiceById = async (id, withPassword = false) => {
 
   const user = await User.findOne({ id });
   if (user) {
-    const userWithoutPassword = remover(user, 'password');
-    return serviceReturn(`User ${id}`, userWithoutPassword, true);
+    if (withPassword) {
+      return serviceReturn(`User ${id}`, user, true);
+    } else {
+      const userWithoutPassword = remover(user, 'password');
+      return serviceReturn(`User ${id}`, userWithoutPassword, true);
+    }
   }
   return serviceReturn(`User ${id} doesn't exist`, {}, false);
 }
@@ -45,8 +49,7 @@ exports.ModifyUsersService = async (newUser) => {
 
 exports.UserDeleteByIdService = async (id) => {
 
-  const userById = await User.deleteOne({ id });
-  console.log(userById);
+  const userById = await User.deleteOne(id);
   if (userById.affectedRows > 0) return serviceReturn(`User ${id} deleted`, {}, true);
   return serviceReturn(`User ${id} doesn't exist`, {}, false);
 }

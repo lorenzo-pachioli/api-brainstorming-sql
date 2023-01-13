@@ -53,7 +53,7 @@ class Middlewares {
       callback(null, data);
       return data;
     } catch (err) {
-      return callback(error, null);
+      return callback(err, null);
     }
   }
 
