@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 const Users = require('./UsersModel');
 const Epics = require('./EpicsModel');
-const UsersBrainstorming = require('./UsersModel');
 
 const storiesSchema = new Schema({
   id: {
@@ -25,12 +24,10 @@ const storiesSchema = new Schema({
   },
   owner: {
     type: Schema.Types.ObjectId,
-    ref: Users,
     required: false
   },
   assignedTo: [{
     type: Schema.Types.ObjectId,
-    ref: Users,
     required: false
   }],
   points: {

@@ -73,7 +73,6 @@ class Middlewares {
   async deleteItem(table, id, callback = (err, result) => { }) {
     try {
       const data = await query(`delete from ${table} where id = ?;`, [id]);
-
       callback(null, data);
       return data;
     } catch (error) {

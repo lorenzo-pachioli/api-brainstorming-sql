@@ -1,56 +1,49 @@
-const { response } = require('../../utils/response');
-const QueryFuctions = require('../middlewares/QueryFunctions');
-const Epics = new QueryFuctions('epics');
-const Projects = new QueryFuctions('project');
-const Project_has_User = new QueryFuctions('project_has_user');
-const Stories = new QueryFuctions('stories');
+const Epics = require('../models/EpicsModel');
+const Stories = require('../models/StoriesModel');
+const Projects = require('../models/ProjectsModel');
+const { serviceReturn } = require('../../utils/response');
 
-exports.NewEpicsService = async (newEpic, res) => {
+exports.AllEpicsService = async (userId) => {
 
-  const epicHasProject = await Projects.findById(newEpic.project);
-  if (!epicHasProject) return response(`The project you're assigning the epic doesn't exist`, res, 200);
+  const projects = await Projects.find({ members: { $in: [userId] } });
+  const ids = projects.map(p => `${p._id}`);
+  const epicList = await Epics.find({ project: { $in: ids } });
 
-  Epics.save(newEpic, (err, result) => {
-    if (err) return response(`Epic creation failed`, res, 200, err);
-    return response(`Epic created succesfully`, res, 200, result);
-  });
+  return serviceReturn(`Epic list`, epicList, true);
 }
 
-exports.AllEpicsService = async (userId, res) => {
+exports.NewEpicsService = async (newEpic) => {
 
-  const projects = await Project_has_User.find({ User_id: userId });
-  const ids = projects.map(project => project.Project_id);
-  await Epics.findInSet('project', ids, (err, result) => {
-    if (err) return response(`Error finding epic list`, res, 200, err);
-    return response(`Epic list`, res, 200, result);
-  });
+  const lastEpic = await Epics.findOne().sort({ _id: -1 }).limit(1);
+  const newMaxId = lastEpic ? lastEpic.id + 1 : 1;
+  newEpic.id = newMaxId;
+  const saved = await Epics.create(newEpic);
+
+  if (saved) return serviceReturn(`Epic created succesfully`, saved, true);
+  return serviceReturn(`The epic ${newEpic.id} failed to save`, {}, false);
 }
 
-exports.EpicsServiceById = async (id, res) => {
+exports.EpicsServiceById = async (id) => {
 
-  Epics.findById(id, (err, result) => {
-    if (err) return response(`Error finding epic ${id}`, res, 200, err);
-    return response(`Epic ${id}`, res, 200, result);
-  });
+  const epicById = await Epics.findOne({ id: id });
+
+  if (epicById) return serviceReturn(`Epic ${id}`, epicById, true);
+  return serviceReturn(`Epic ${id} doesn't exist`, {}, false);
 }
 
-exports.EpicsServiceByIdAllStories = async (id, res) => {
+exports.EpicsServiceByIdAllStories = async (id) => {
 
-  const epicId = await Epics.findById(id);
-  if (!epicId) return response(`Epic ${id} doesn't exist`, res, 200);
+  const storiesList = await Stories.find({ epic: id });
 
-  Stories.find({ epic: id }, (err, result) => {
-    if (err) return response(`There're no stories for epic ${id}`, res, 200, err);
-    return response(`Stories for epic ${id}`, res, 200, result);
-  });
+  if (storiesList.length > 0) return serviceReturn(`Stories for epic ${id}`, storiesList, true);
+  return serviceReturn(`There're no stories for epic ${id}`, [], false);
 }
 
-exports.EpicDeleteByIdService = async (id, res) => {
+exports.EpicDeleteByIdService = async (id) => {
 
-  const epic = await Epics.find({ id: id });
-  if (epic.length === 0) return response(`Epic ${id} doesn't exist`, res, 200, {});
-  const epicById = await Epics.deleteOne(id);
-  if (epicById.affectedRows > 0) return response(`Epic ${id} deleted`, res, 200, epic);
+  const epic = await Epics.findOne({ id: id });
+  const epicById = await Epics.deleteOne({ id: id });
 
-  return response(`Epic ${id} failed to delete`, res, 500, {});
+  if (epicById.deletedCount > 0) return serviceReturn(`Epic ${id} deleted`, epic, true);
+  return serviceReturn(`Epic ${id} doesn't exist`, {}, false);
 }

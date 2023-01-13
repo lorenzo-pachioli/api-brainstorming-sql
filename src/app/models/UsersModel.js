@@ -1,34 +1,50 @@
-const { Schema, model } = require('mongoose');
+const QueryFuctions = require("../middlewares/QueryFunctions");
 
-const usersSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-    min: 1,
-    unique: true,
-  },
+const User = new QueryFuctions('user');
+
+const usersSchema = {
   email: {
     type: String,
-    required: true
+    required: true,
+    length: {
+      min: 6,
+      max: 45
+    },
   },
   username: {
     type: String,
-    required: true
+    required: true,
+    length: {
+      min: 5,
+      max: 45
+    },
   },
   password: {
     type: String,
-    required: true
-  },
-  name: {
-    first: {
-      type: String,
-      required: false
+    required: true,
+    length: {
+      min: 5,
+      max: 20
     },
-    last: {
-      type: String,
-      required: false
+  },
+  firstname: {
+    type: String,
+    required: false,
+    length: {
+      min: 3,
+      max: 25
     }
+  },
+  lastname: {
+    type: String,
+    required: false,
+    length: {
+      min: 1,
+      max: 25
+    },
   }
-});
-const UsersBrainstorming = model('UsersBrainstorming', usersSchema);
-module.exports = UsersBrainstorming;
+};
+
+User.newSchema(usersSchema);
+
+module.exports = User;

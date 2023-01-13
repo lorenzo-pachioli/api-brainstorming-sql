@@ -1,57 +1,52 @@
-const { response } = require('../../utils/response');
+
 const { remover } = require('../../utils/remover');
-const QueryFuctions = require('../middlewares/QueryFunctions');
-const User = new QueryFuctions('user');
+const { serviceReturn } = require('../../utils/response');
+const User = require('../models/UsersModel');
 
-exports.NewUsersService = async (newUser, res) => {
+exports.NewUsersService = async (newUser) => {
 
-  const result = await User.find({ email: newUser.email });
-  if (result.length > 0) return response(`Email '${newUser.email}' already exist`, res, 200, {});
+  const userAlreadyExist = await User.findOne({ username: newUser.username });
+  if (userAlreadyExist) return serviceReturn(`Username '${newUser.username}' already exist`, {}, false);
 
-  User.save(newUser, (err, result) => {
-    if (err) return response(`User created failed`, res, 200, err);
-    return response(`User created succesfully`, res, 200, result);
-  });
+  const saved = await User.save(newUser);
+  if (saved) return serviceReturn(`User created succesfully`, saved, true);
+  return serviceReturn(`The user ${newStory.id} failed to save`, {}, false);
 }
 
-exports.AllUsersService = async (res) => {
+exports.AllUsersService = async () => {
 
   const userList = await User.findAll();
   if (userList.length > 0) {
     const userListWithoutPass = remover(userList, 'password');
-    return response(`User list`, res, 200, userListWithoutPass);
+    return serviceReturn(`User list`, userListWithoutPass, true);
   }
-
-  return response(`User list is empty`, res, 200);
+  return serviceReturn(`User list is empty`, [], true);
 }
 
-exports.UsersServiceById = async (_id, res) => {
+exports.UsersServiceById = async (id) => {
 
-  const alreadyExist = await User.findById(_id);
-
-  if (alreadyExist.length > 0) {
-    const userWithoutPassword = remover(alreadyExist[0], 'password');
-    return response(`User ${_id}`, res, 200, userWithoutPassword);
+  const user = await User.findOne({ id });
+  if (user) {
+    const userWithoutPassword = remover(user, 'password');
+    return serviceReturn(`User ${id}`, userWithoutPassword, true);
   }
-
-  return response(`User ${_id} doesn't exist`, res, 200, {});
+  return serviceReturn(`User ${id} doesn't exist`, {}, false);
 }
 
-exports.ModifyUsersService = (newUser, res) => {
+exports.ModifyUsersService = async (newUser) => {
 
-  User.findOneAndUpdate({ id: newUser.id }, newUser, (err, result) => {
-    if (err) return response(`Modify user ${id} failed`, res, 200, {});
-    if (result.affectedRows === 0) return response(`User ${id} doesn't exist`, res, 200, {});
-    const userUpdatedNoPass = remover(result);
-    return response(`User ${newUser.id} updated`, res, 200, userUpdatedNoPass);
-  });
+  const userUpdated = await User.findOneAndUpdate({ id: newUser.id }, newUser);
+  if (userUpdated) {
+    const userUpdatedNoPass = remover(userUpdated);
+    return serviceReturn(`User ${newUser.id} updated`, userUpdatedNoPass, true);
+  }
+  return serviceReturn(`Couldn't update user`, {}, false);
 }
 
-exports.UserDeleteByIdService = (id, res) => {
+exports.UserDeleteByIdService = async (id) => {
 
-  User.deleteOne(id, (err, result) => {
-    if (err) return response(`Delete user ${id} failed`, res, 200, {});
-    if (result.affectedRows === 0) return response(`User ${id} doesn't exist`, res, 200, {});
-    return response(`User ${id} deleted succesfully`, res, 200, {});
-  });
+  const userById = await User.deleteOne({ id });
+  console.log(userById);
+  if (userById.affectedRows > 0) return serviceReturn(`User ${id} deleted`, {}, true);
+  return serviceReturn(`User ${id} doesn't exist`, {}, false);
 }

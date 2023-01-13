@@ -1,11 +1,24 @@
 const Middlewares = require('./Middlewares');
-
+const Validator = require('schema-validator');
+const { isIdInteger } = require('../../utils/inputsValidator');
 const middleware = new Middlewares;
 
 class QueryFuctions {
 
+  schemaValidator;
+
   constructor(table) {
     this.table = table;
+  }
+
+  newSchema(schema) {
+    this.schemaValidator = new Validator(schema);
+  }
+
+  async createModel(model) {
+    const valid = this.schemaValidator.check(model);
+    if (valid._error) throw new Error(`Invalid ${this.table} schema`);
+    return valid;
   }
 
   async findAll(callback) {
@@ -14,6 +27,7 @@ class QueryFuctions {
   }
 
   async findById(id, callback) {
+    if (isIdInteger(id)) throw new Error(`Invalid id type`);
     const result = await middleware.getAllMatchs(this.table, { id }, callback);
     return result;
   }
@@ -23,23 +37,32 @@ class QueryFuctions {
     return result;
   }
 
+  async findOne(info, callback) {
+    const result = await middleware.getAllMatchs(this.table, info, callback);
+    return result[0];
+  }
+
   async findInSet(filter, value, callback) {
     const result = await middleware.getInSet(this.table, filter, value, callback);
     return result;
   }
 
   async findOneAndUpdate(filter, update, callback) {
-    const result = await middleware.getOneAndUpdate(this.table, filter, update, callback);
+    const model = this.createModel(update);
+    const result = await middleware.getOneAndUpdate(this.table, filter, model, callback);
     return result;
   }
 
   async save(item, callback) {
-    await middleware.newItem(this.table, item, () => { });
-    const result = await middleware.getAllMatchs(this.table, item, callback);
+    const model = await this.createModel(item);
+    await middleware.newItem(this.table, model, () => { });
+    const result = await middleware.getAllMatchs(this.table, model, callback);
     return result;
   }
 
   async deleteOne(id, callback) {
+
+    if (isIdInteger(id)) throw new Error(`Invalid id type`);
     const result = await middleware.deleteItem(this.table, id, callback);
     return result;
   }

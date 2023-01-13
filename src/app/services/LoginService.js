@@ -1,23 +1,26 @@
 const jwt = require('jsonwebtoken');
-const UsersBrainstorming = require('../models/UsersModel');
-const { logInResponse } = require('../../utils/response');
 const { remover } = require('../../utils/remover');
+const { serviceReturn } = require('../../utils/response');
+const User = require('../models/UsersModel');
+const env = require('dotenv')
 
-exports.LoginService = async (user, res) => {
+exports.LoginService = async (user) => {
 
-  const userExist = await UsersBrainstorming.findOne({ username: user.username });
+  const userExist = await User.findOne({ username: user.username });
 
   if (userExist) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
+    const jwtSecretKey = process.env.JWT_SECRET_KEY || env.JWT_SECRET_KEY
     const data = {
       time: Date(),
-      userId: userExist._id,
+      userId: userExist.id,
     };
     const token = jwt.sign(data, jwtSecretKey);
     const userWithoutPass = remover(userExist, 'password');
-
-    return logInResponse(`Correct login user ${user.username}`, res, 200, token, userWithoutPass);
+    const response = {
+      token,
+      user: userWithoutPass
+    };
+    return serviceReturn(`Correct login user ${user.username}`, response, true);
   }
-
-  return logInResponse(`User ${user.username} doesn't exist`, res, 200);
+  return serviceReturn(`User ${user.username} doesn't exist`, {}, false);
 }

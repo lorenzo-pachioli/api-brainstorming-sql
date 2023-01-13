@@ -1,19 +1,23 @@
 const { LoginService } = require('../services/LoginService');
-const { response, next } = require('../../utils/response');
+const { response, logInResponse } = require('../../utils/response');
 const { newError } = require('../../utils/errorModeling');
 
-exports.LoginController = (body, res) => {
+exports.LoginController = async (req, res, next) => {
 
-  if (body.username.length < 4) return response('Incorrect username length', 401, res);
-  if (body.password.length < 4) return response('Incorrect password length', 401, res);
+  try {
+    const { username, password } = req.body;
+    if (username.length < 4) return response('Incorrect username length', 401, res);
+    if (password.length < 4) return response('Incorrect password length', 401, res);
 
-  const user = {
-    username: body.username,
-    password: body.password
-  }
-
-  LoginService(user, res).catch((err) => {
+    const user = {
+      username,
+      password
+    }
+    console.log(user);
+    const logedIn = await LoginService(user);
+    return logInResponse(logedIn.msg, res, 200, logedIn.content.token, logedIn.content.user);
+  } catch (err) {
     console.log(err);
-    next(newError(`Couldn't login${err}`, 500))
-  });
+    return next(newError(`Couldn't login${err}`, 500));
+  }
 }

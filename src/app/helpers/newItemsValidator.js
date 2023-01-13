@@ -3,13 +3,14 @@ const {
   isDescriptionValid,
   isObjectIdValid,
   isArrayOfObjIdValid,
-  isDateValid
+  isDateValid,
+  isIdInteger
 } = require('../../utils/inputsValidator');
 const { response } = require('../../utils/response');
 
-exports.isNewUserValid = (newUser, res) => {
+exports.isNewUserValid = (req, res, next) => {
 
-  const { email, password, username, name } = newUser;
+  const { email, password, username, firstname, lastname } = req.body;
   const regExEmail = /^[-\w.%+]{1,30}@(?:[A-Z0-9-]{4,30}\.)[A-Z]{2,20}$/i;
   const onlyNumbers = /^(.*\d){6,15}$/;
 
@@ -26,16 +27,16 @@ exports.isNewUserValid = (newUser, res) => {
   if (username.length < 4) return response('Incorrect username', res, 400);
 
   //Validate name.first
-  if (name.first.length < 4) return response('Incorrect name first', res, 400);
+  if (firstname.length < 4) return response('Incorrect firstname', res, 400);
 
   //Validate name.last
-  if (name.last.length < 4) return response('Incorrect name last', res, 400);
+  if (lastname.length < 1) return response('Incorrect lastname', res, 400);
 
-  return true;
+  next();
 }
 
-exports.isNewProjectValid = (newProject, res) => {
-  const { name, members, description } = newProject;
+exports.isNewProjectValid = (req, res, next) => {
+  const { name, members, description } = req.body;
 
   //Validate required info
   if (!name || !members) return response('Incorrect new project', res, 400);
@@ -49,11 +50,11 @@ exports.isNewProjectValid = (newProject, res) => {
   //Validate project members id
   if (!isArrayOfObjIdValid(members)) return response('Project members id invalid', res, 400);
 
-  return true;
+  next();
 }
 
-exports.isNewEpicValid = (newEpic, res) => {
-  const { project, name, description } = newEpic;
+exports.isNewEpicValid = (req, res, next) => {
+  const { project, name, description } = req.body;
 
   //Validate required info
   if (!name || !project) return response('Incorrect new project', res, 400);
@@ -67,10 +68,10 @@ exports.isNewEpicValid = (newEpic, res) => {
   //Validate project id
   if (!isObjectIdValid(project)) return response('Project id invalid', res, 400);
 
-  return true;
+  next();
 }
 
-exports.isNewStoryValid = (newStory, res) => {
+exports.isNewStoryValid = (req, res, next) => {
   const {
     name,
     epic,
@@ -83,7 +84,7 @@ exports.isNewStoryValid = (newStory, res) => {
     started,
     finished,
     status
-  } = newStory;
+  } = req.body;
 
   //Validate required info
   if (!name || !epic) return response('Incorrect new story', res, 400);
@@ -121,10 +122,26 @@ exports.isNewStoryValid = (newStory, res) => {
   //Validate finished
   if (finished && !isDateValid(finished)) return response('Story finished date is invalid', res, 400);
 
-  return true;
+  next();
 }
 
-exports.isNewTaskValid = (newTask, res) => {
+exports.idValidation = (req, res, next) => {
+  const { id } = req.body;
+
+  //Validate id
+  if (!isIdInteger(id)) return response('id invalid', res, 400);
+  next();
+}
+
+exports.objectIdValidation = (req, res, next) => {
+  const { _id } = req.body;
+
+  //Validate _id
+  if (!isObjectIdValid(_id)) return response('_id invalid', res, 400);
+  next();
+}
+
+exports.isNewTaskValid = (req, res, next) => {
   const {
     name,
     description,
@@ -132,7 +149,7 @@ exports.isNewTaskValid = (newTask, res) => {
     created,
     dueDate,
     done
-  } = newTask;
+  } = req.body;
 
   //Validate required info
   if (!name || !story) return response('Incorrect new task', res, 400);
@@ -155,5 +172,5 @@ exports.isNewTaskValid = (newTask, res) => {
   //Validate done
   if (done && done !== true && done !== false) return response('Task done is invalid', res, 400);
 
-  return true;
+  next();
 }

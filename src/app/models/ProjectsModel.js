@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const UsersBrainstorming = require('./UsersModel');
 const Users = require('./UsersModel');
 
 const projectsSchema = new Schema({
@@ -15,7 +14,6 @@ const projectsSchema = new Schema({
   },
   members: [{
     type: Schema.Types.ObjectId,
-    ref: Users,
     required: true
   }],
   description: {

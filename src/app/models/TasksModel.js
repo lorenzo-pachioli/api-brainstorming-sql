@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose');
 const Stories = require('./StoriesModel');
-const UsersBrainstorming = require('./UsersModel');
 
 const tasksSchema = new Schema({
   id: {
