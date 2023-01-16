@@ -1,18 +1,25 @@
 const Middlewares = require('./Middlewares');
-/* const Validator = require('schema-validator'); */
 const { isIdInteger } = require('../../utils/inputsValidator');
 const Validator = require('../../utils/schemaValidator');
 const middleware = new Middlewares;
 
-class QueryFuctions {
+/* 
+x Model.deleteMany()
+x Model.deleteOne()
+x Model.find()
+x Model.findById()
+x Model.findByIdAndDelete()
+x Model.findOne()
+x Model.findOneAndUpdate()
+x Model.updateMany()
+x Model.save() */
+
+class Model {
 
   schemaValidator;
 
-  constructor(table) {
+  constructor(table, schema) {
     this.table = table;
-  }
-
-  newSchema(schema) {
     this.schemaValidator = new Validator(schema);
   }
 
@@ -23,25 +30,18 @@ class QueryFuctions {
     return model;
   }
 
-  /*   async validateCampus(model) {
-      const setQuery = queryForCreate(model);
-      const valid = this.schemaValidator.check(model);
-      console.log(setQuery, 'item', Object.keys(valid), Object.keys(valid).find(item => item === setQuery));
-      return valid;
-    } */
-
-  async findAll(callback) {
-    const result = await middleware.getAllTable(this.table, callback);
-    return result;
-  }
-
   async findById(id, callback) {
     if (isIdInteger(id)) throw new Error(`Invalid id type`);
     const result = await middleware.getAllMatchs(this.table, { id }, callback);
-    return result;
+    return result[0];
   }
 
-  async find(info, callback) {
+  async find(info = {}, callback) {
+
+    if (Object.keys(info).length === 0) {
+      const result = await middleware.getAllTable(this.table, callback);
+      return result;
+    }
     const result = await middleware.getAllMatchs(this.table, info, callback);
     return result;
   }
@@ -59,7 +59,23 @@ class QueryFuctions {
   async findOneAndUpdate(filter, update, callback) {
     const model = this.createModel(update);
     const result = await middleware.getOneAndUpdate(this.table, filter, model, callback);
-    return result;
+    if (result.affectedRows > 0) {
+      const newItem = await middleware.getAllMatchs(this.table, filter, callback);
+      return newItem[0];
+    }
+    return;
+  }
+
+  async updateMany(filter, update, callback) {
+
+    const itemsToUpdate = await this.find(filter);
+    if (itemsToUpdate.length === 0) return { error: true, msg: 'No matchs found' };
+    const ids = itemsToUpdate.map(item => item.id);
+
+    /* const model = this.createModel(update); */
+    const result = await middleware.updateMany(this.table, ids, update, callback);
+    if (result.affectedRows > 0) return itemsToUpdate;
+    return;
   }
 
   async save(item, callback) {
@@ -69,12 +85,31 @@ class QueryFuctions {
     return result;
   }
 
-  async deleteById(id, callback) {
-
+  async findByIdAndDelete(id, callback) {
     if (isIdInteger({ id })) throw new Error(`Invalid id type`);
     const result = await middleware.deleteItem(this.table, id, callback);
     return result;
   }
+
+  async deleteOne(filter, callback) {
+    const item = this.findOne(filter);
+    if (!item) return { error: true, msg: 'No matchs found' }
+    const result = await middleware.deleteItem(this.table, item.id, callback);
+    return result;
+  }
+
+  async deleteMany(filter, callback) {
+
+    const itemsToDelete = await this.find(filter);
+    if (itemsToDelete.length === 0) return { error: true, msg: 'No matchs found' };
+    const ids = itemsToDelete.map(item => item.id);
+
+    /* const model = this.createModel(update); */
+    const result = await middleware.deleteMany(this.table, ids, callback);
+    console.log(result);
+    if (result.affectedRows > 0) return itemsToDelete;
+    return;
+  }
 }
 
-module.exports = QueryFuctions;
+module.exports = Model;

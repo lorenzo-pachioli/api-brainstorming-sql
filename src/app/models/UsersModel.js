@@ -1,6 +1,4 @@
-const QueryFuctions = require("../middlewares/QueryFunctions");
-
-const User = new QueryFuctions('user');
+const Model = require("../middlewares/QueryFunctions");
 
 const usersSchema = {
   email: {
@@ -45,6 +43,6 @@ const usersSchema = {
   }
 };
 
-User.newSchema(usersSchema);
+const User = new Model('user', usersSchema);
 
 module.exports = User;

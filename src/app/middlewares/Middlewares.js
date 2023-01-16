@@ -6,7 +6,6 @@ class Middlewares {
   async getAllTable(table, callback = (err, result) => { }) {
     try {
       const data = await query(`select * from ${table};`);
-
       callback(null, data);
       return data;
     } catch (error) {
@@ -19,7 +18,6 @@ class Middlewares {
       const newQuery = queryForSelect(userInfo);
       const newValues = valuesArray(userInfo);
       const data = await query(`select * from ${table} where ${newQuery};`, newValues);
-
       callback(null, data);
       return data;
     } catch (error) {
@@ -31,7 +29,6 @@ class Middlewares {
     try {
       const setValues = values.toString();
       const data = await query(`select * from ${table} t where FIND_IN_SET(t.${filter}, '${setValues}');`);
-
       callback(null, data);
       return data;
     } catch (error) {
@@ -46,10 +43,20 @@ class Middlewares {
       const setValues = valuesArray(update);
       const whereValues = valuesArray(filter);
       const completeValues = setValues.concat(whereValues);
+      const data = await query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues);
+      callback(null, data);
+      return data;
+    } catch (err) {
+      return callback(err, null);
+    }
+  }
 
-      await query(`update ${table} set ${setQuery} where ${whereQuery};`, completeValues);
-      const data = await this.getOne(table, filter);
-
+  async updateMany(table, ids, update, callback = (err, result) => { }) {
+    try {
+      const setQuery = queryForUpdate(update);
+      const setValues = valuesArray(update);
+      const completeValues = setValues.concat(ids);
+      const data = await query(`update ${table} t set ${setQuery} where id in(${ids.toString()});`, completeValues);
       callback(null, data);
       return data;
     } catch (err) {
@@ -62,7 +69,6 @@ class Middlewares {
       const newQuery = queryForCreate(item);
       const values = valuesArray(item);
       const data = await query(`insert into ${table}(${newQuery}) values (?)`, [values]);
-
       callback(null, data);
       return data;
     } catch (error) {
@@ -77,6 +83,16 @@ class Middlewares {
       return data;
     } catch (error) {
       return callback(error, null);
+    }
+  }
+
+  async deleteMany(table, ids, callback = (err, result) => { }) {
+    try {
+      const data = await query(`delete from ${table} where id in(${ids.toString()});`, ids);
+      callback(null, data);
+      return data;
+    } catch (err) {
+      return callback(err, null);
     }
   }
 }
