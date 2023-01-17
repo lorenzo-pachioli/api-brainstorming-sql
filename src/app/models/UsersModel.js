@@ -36,6 +36,7 @@ const usersSchema = {
   lastname: {
     type: String,
     required: false,
+    default: 'lastname',
     length: {
       min: 1,
       max: 25
